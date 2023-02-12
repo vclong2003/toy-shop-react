@@ -17,14 +17,7 @@ root.render(
     <BrowserRouter>
       <NavigationBar />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
@@ -35,7 +28,7 @@ root.render(
 async function PrivateRoute({ children }) {
   let user;
   await axios
-    .get(`${api_endpoint}/user`)
+    .get(`${api_endpoint}/user`, { withCredentials: true })
     .then((response) => {
       console.log(response);
     })
