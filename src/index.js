@@ -27,8 +27,6 @@ function App() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  console.log(user);
-
   axios
     .get(`${api_endpoint}/user`, { withCredentials: true })
     .then((response) => {
@@ -39,6 +37,8 @@ function App() {
     .catch((err) => {
       console.log(err);
     });
+
+  console.log(user);
 
   return (
     <BrowserRouter>
