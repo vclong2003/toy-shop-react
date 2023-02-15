@@ -1,5 +1,5 @@
 .itemContainer {
-  margin-top: 20px;
+  margin-top: 12px;
 }
 
 .paginationContainer {
@@ -7,4 +7,7 @@
   flex-direction: row;
   justify-content: center;
   margin-top: 20px;
+}
+.orderBtnConatainer {
+  margin-top: 10px;
 }

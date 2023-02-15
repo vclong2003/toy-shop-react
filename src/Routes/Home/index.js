@@ -1,6 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Card, Col, Container, Pagination, Ratio, Row } from "react-bootstrap";
+import {
+  Card,
+  Col,
+  Container,
+  Dropdown,
+  Pagination,
+  Ratio,
+  Row,
+} from "react-bootstrap";
 import { api_endpoint } from "../../config";
 import styles from "./style.module.css";
 
@@ -13,10 +21,18 @@ export default function Home() {
   const [activePage, setActivePage] = useState(1);
   const paginationItems = [];
 
+  //For sorting
+  const sortOptions = [
+    { name: "Newest first", value: "dateAdded_desc" },
+    { name: "Low price", value: "price_asc" },
+    { name: "Name A-Z", value: "name_asc" },
+  ];
+  const [sorting, setSorting] = useState("dateAdded_desc");
+
   const fetchProducts = () => {
     axios
       .get(
-        `${api_endpoint}/product?skip=${
+        `${api_endpoint}/product?sort=${sorting}&skip=${
           productsPerPage * (activePage - 1)
         }&limit=${productsPerPage}`
       )
@@ -48,11 +64,31 @@ export default function Home() {
 
   useEffect(() => {
     fetchProducts();
-  }, [activePage]);
+  }, [activePage, sorting]);
 
   return (
     <Container>
-      <Container fluid></Container>
+      <Container fluid className={styles.orderBtnConatainer}>
+        <Dropdown>
+          <Dropdown.Toggle>Sort by</Dropdown.Toggle>
+          <Dropdown.Menu>
+            {sortOptions.map((item, index) => {
+              return (
+                <Dropdown.Item
+                  key={index}
+                  onClick={() => {
+                    setSorting(item.value);
+                  }}
+                  style={{
+                    background: sorting === item.value ? "#E4E5E6" : "",
+                  }}>
+                  {item.name}
+                </Dropdown.Item>
+              );
+            })}
+          </Dropdown.Menu>
+        </Dropdown>
+      </Container>
       <Row>
         {products.map((item, index) => {
           return (
