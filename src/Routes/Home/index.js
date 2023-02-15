@@ -7,23 +7,11 @@ import styles from "./style.module.css";
 export default function Home() {
   const [products, setProducts] = useState([]);
 
-  const productsPerPage = 5;
+  // For pagination
+  const productsPerPage = 18;
   const [pages, setPages] = useState(1);
   const [activePage, setActivePage] = useState(1);
   const paginationItems = [];
-
-  const fetchProductsCount = () => {
-    axios
-      .get(`${api_endpoint}/product?limit=1`)
-      .then((res) => {
-        if (res.status === 200) {
-          setPages(Math.ceil(res.data.count / productsPerPage));
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   const fetchProducts = () => {
     axios
@@ -35,6 +23,8 @@ export default function Home() {
       .then((res) => {
         if (res.status === 200) {
           setProducts(res.data.data);
+          setPages(Math.ceil(res.data.count / productsPerPage));
+          window.scrollTo(0, 0);
         }
       })
       .catch((err) => {
@@ -42,6 +32,7 @@ export default function Home() {
       });
   };
 
+  // Render pagination items
   for (let i = 1; i <= pages; i++) {
     paginationItems.push(
       <Pagination.Item
@@ -49,7 +40,6 @@ export default function Home() {
         active={i === activePage}
         onClick={() => {
           setActivePage(i);
-          fetchProducts();
         }}>
         {i}
       </Pagination.Item>
@@ -57,9 +47,8 @@ export default function Home() {
   }
 
   useEffect(() => {
-    fetchProductsCount();
     fetchProducts();
-  }, []);
+  }, [activePage]);
 
   return (
     <Container>
@@ -84,7 +73,9 @@ export default function Home() {
           );
         })}
       </Row>
-      <Pagination>{paginationItems}</Pagination>
+      <Container fluid className={styles.paginationContainer}>
+        <Pagination>{paginationItems}</Pagination>
+      </Container>
     </Container>
   );
 }

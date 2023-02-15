@@ -1,3 +1,10 @@
 .itemContainer {
   margin-top: 20px;
 }
+
+.paginationContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 20px;
+}
