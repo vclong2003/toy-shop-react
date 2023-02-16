@@ -103,7 +103,7 @@ export default function Home() {
       <Row>
         {products.map((item, index) => {
           return (
-            <Col lg={2} key={index} className={styles.itemContainer}>
+            <Col lg={2} sm={4} key={index} className={styles.itemContainer}>
               <Card>
                 <Ratio aspectRatio="1x1">
                   <Card.Img variant="top" src="https://picsum.photos/300/300" />

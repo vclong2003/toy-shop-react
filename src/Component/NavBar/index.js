@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Container, Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { Container, Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import logout from "../Auth/logout";
 
@@ -12,18 +11,25 @@ export default function NavigationBar() {
         <Navbar.Brand href="#home">ATN Toy Shop</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            {singedIn ? (
-              <NavDropdown title={email} id="basic-nav-dropdown">
-                <NavDropdown.Item>Profile</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
-              </NavDropdown>
-            ) : (
-              ""
-            )}
-            {singedIn ? "" : <Nav.Link href="/login">Login</Nav.Link>}
-          </Nav>
+          <Nav className="me-auto"></Nav>
+          {singedIn ? "" : <Button href="/login">Login</Button>}
+          {singedIn ? (
+            <NavDropdown title={email} id="basic-nav-dropdown">
+              <NavDropdown.Item>Cart</NavDropdown.Item>
+              <NavDropdown.Item>Profile</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item>
+                <Button
+                  onClick={logout}
+                  style={{ width: "100%" }}
+                  variant="dark">
+                  Logout
+                </Button>
+              </NavDropdown.Item>
+            </NavDropdown>
+          ) : (
+            ""
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>
