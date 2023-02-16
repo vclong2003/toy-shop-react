@@ -63,6 +63,10 @@ export default function Home() {
   }
 
   useEffect(() => {
+    setActivePage(1);
+  }, [sorting]);
+
+  useEffect(() => {
     fetchProducts();
   }, [activePage, sorting]);
 
