@@ -1,6 +1,7 @@
 import { Container, Navbar, Nav } from "react-bootstrap";
 
 export default function NavigationBar() {
+  
   return (
     <Navbar bg="light" expand="lg">
       <Container>
