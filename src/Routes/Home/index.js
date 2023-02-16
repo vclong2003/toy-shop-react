@@ -9,10 +9,12 @@ import {
   Ratio,
   Row,
 } from "react-bootstrap";
+import LoadingLayer from "../../Component/LoadingAnimation/layer";
 import { api_endpoint } from "../../config";
 import styles from "./style.module.css";
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
 
   // For pagination
@@ -30,6 +32,7 @@ export default function Home() {
   const [sorting, setSorting] = useState("dateAdded_desc");
 
   const fetchProducts = () => {
+    setLoading(true);
     axios
       .get(
         `${api_endpoint}/product?sort=${sorting}&skip=${
@@ -40,6 +43,7 @@ export default function Home() {
         if (res.status === 200) {
           setProducts(res.data.data);
           setPages(Math.ceil(res.data.count / productsPerPage));
+          setLoading(false);
           window.scrollTo(0, 0);
         }
       })
@@ -63,15 +67,12 @@ export default function Home() {
   }
 
   useEffect(() => {
-    setActivePage(1);
-  }, [sorting]);
-
-  useEffect(() => {
     fetchProducts();
   }, [activePage, sorting]);
 
   return (
     <Container>
+      {loading ? <LoadingLayer /> : ""}
       <Container fluid className={styles.orderBtnConatainer}>
         <Dropdown>
           <Dropdown.Toggle>Sort by</Dropdown.Toggle>
@@ -82,6 +83,7 @@ export default function Home() {
                   key={index}
                   onClick={() => {
                     setSorting(item.value);
+                    setActivePage(1);
                   }}
                   style={{
                     background: sorting === item.value ? "#E4E5E6" : "",
