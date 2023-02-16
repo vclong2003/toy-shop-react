@@ -19,8 +19,10 @@ export default function Login() {
         },
         { withCredentials: true }
       )
-      .then((response) => {
-        console.log(response.status);
+      .then((res) => {
+        if (res.status === 200) {
+          window.location.href = "/";
+        }
       })
       .catch((err) => {
         console.log(err);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -23,24 +23,21 @@ root.render(
   </React.StrictMode>
 );
 
-
-
 function App() {
-  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  axios
-    .get(`${api_endpoint}/user`, { withCredentials: true })
-    .then((response) => {
-      if (response.status === 200) {
-        dispatch(setUser({ singedIn: true, ...response.data }));
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  console.log(user);
+  useEffect(() => {
+    axios
+      .get(`${api_endpoint}/user`, { withCredentials: true })
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(setUser({ singedIn: true, ...response.data }));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <BrowserRouter>

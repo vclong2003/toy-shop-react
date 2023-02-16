@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {
+  Button,
   Card,
   Col,
   Container,
@@ -9,11 +10,15 @@ import {
   Ratio,
   Row,
 } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import LoadingLayer from "../../Component/LoadingAnimation/layer";
 import { api_endpoint } from "../../config";
+import { setEmail, setUser } from "../../Redux/user";
 import styles from "./style.module.css";
 
 export default function Home() {
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
 
