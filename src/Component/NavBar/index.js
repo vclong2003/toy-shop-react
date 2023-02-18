@@ -1,9 +1,16 @@
-import { Container, Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
+import {
+  Container,
+  Navbar,
+  Nav,
+  NavDropdown,
+  Button,
+  Badge,
+} from "react-bootstrap";
 import { useSelector } from "react-redux";
 import logout from "../Auth/logout";
 
 export default function NavigationBar() {
-  const { singedIn, email } = useSelector((state) => state.user);
+  const { singedIn, email, role } = useSelector((state) => state.user);
 
   return (
     <Navbar bg="light" expand="lg">
@@ -14,7 +21,20 @@ export default function NavigationBar() {
           <Nav className="me-auto"></Nav>
           {singedIn ? "" : <Button href="/login">Login</Button>}
           {singedIn ? (
-            <NavDropdown title={email} id="basic-nav-dropdown">
+            <NavDropdown
+              title={
+                <>
+                  {email}{" "}
+                  {role.includes("staff") ? (
+                    <Badge pill bg="info">
+                      <i>Staff</i>
+                    </Badge>
+                  ) : (
+                    ""
+                  )}
+                </>
+              }
+              id="basic-nav-dropdown">
               <NavDropdown.Item>Cart</NavDropdown.Item>
               <NavDropdown.Item>Profile</NavDropdown.Item>
               <NavDropdown.Divider />

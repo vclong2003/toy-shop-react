@@ -1,10 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Image, Row } from "react-bootstrap";
+import ReactQuill from "react-quill";
 import AuthorizedPage from "../../Component/Auth/authorizedPage";
 
 export default function EditProduct() {
-  const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState({
+    name: "",
+    price: 0,
+    stock: 0,
+    thumbnailUrl: "",
+  });
+  const [richDescription, setRichDescription] = useState("");
+
+  useEffect(() => {
+    console.log(richDescription);
+  }, [richDescription]);
 
   return (
     <Container>
@@ -41,7 +53,25 @@ export default function EditProduct() {
             </Row>
           </Col>
           {/* Right */}
-          <Col lg={6}></Col>
+          <Col lg={6}>
+            <Form.Group>
+              <Form.Label>Description</Form.Label>
+              <ReactQuill
+                theme="snow"
+                value={richDescription}
+                onChange={setRichDescription}
+                modules={{
+                  toolbar: [
+                    [{ header: [1, 2, 3, false] }],
+                    ["bold", "italic"],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    ["link", "image"],
+                    ["clean"],
+                  ],
+                }}
+              />
+            </Form.Group>
+          </Col>
         </Row>
         <Button variant="primary" type="submit">
           Save
