@@ -13,6 +13,7 @@ import {
   Row,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { Navigate, redirect, useNavigate } from "react-router-dom";
 import AuthorizedContent from "../../Component/Auth/authorizedContent";
 import LoadingLayer from "../../Component/LoadingAnimation/layer";
 import { api_endpoint } from "../../config";
@@ -20,6 +21,8 @@ import styles from "./style.module.css";
 
 export default function Home() {
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
@@ -103,7 +106,13 @@ export default function Home() {
         </Dropdown>
         <div style={{ width: "1%" }} />
         <AuthorizedContent requiredRole="staff">
-          <Button variant="light">Add product</Button>
+          <Button
+            variant="light"
+            onClick={() => {
+              navigate("/addProduct");
+            }}>
+            Add product
+          </Button>
         </AuthorizedContent>
       </Container>
       <Row>

@@ -1,12 +1,12 @@
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { redirect } from "react-router-dom";
+import { Navigate, redirect } from "react-router-dom";
 
 export default function AuthorizedPage({ children, requiredRole }) {
   const { singedIn, role } = useSelector((state) => state.user);
 
   if (!singedIn) {
-    return redirect("/login");
+    return <Navigate to="/login" />;
   }
 
   if (!role.includes(requiredRole)) {
@@ -16,4 +16,6 @@ export default function AuthorizedPage({ children, requiredRole }) {
       </Container>
     );
   }
+
+  return children;
 }
