@@ -1,17 +1,25 @@
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { Navigate, redirect } from "react-router-dom";
+import { Navigate, redirect, useNavigate } from "react-router-dom";
 
 export default function AuthorizedPage({ children, requiredRole }) {
   const { singedIn, role } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   if (!singedIn) {
     return <Navigate to="/login" />;
   }
 
   if (!role.includes(requiredRole)) {
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
     return (
-      <Container>
+      <Container
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}>
         <h4>You are not allowed to view this page!</h4>
       </Container>
     );

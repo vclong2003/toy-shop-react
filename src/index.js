@@ -29,19 +29,23 @@ function App() {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const getCurrentUser = async () => {
     setLoading(true);
-    axios
+    await axios
       .get(`${api_endpoint}/user`, { withCredentials: true })
       .then((response) => {
         if (response.status === 200) {
           dispatch(setUser({ singedIn: true, ...response.data }));
         }
-        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getCurrentUser();
   }, []);
 
   return loading ? (
