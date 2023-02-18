@@ -11,6 +11,7 @@ import {
   Row,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import AuthorizedContent from "../../Component/Auth/authorizedContent";
 import LoadingLayer from "../../Component/LoadingAnimation/layer";
 import { api_endpoint } from "../../config";
 import { setEmail, setUser } from "../../Redux/user";
@@ -78,7 +79,7 @@ export default function Home() {
   return (
     <Container>
       {loading ? <LoadingLayer /> : ""}
-      <Container fluid className={styles.orderBtnConatainer}>
+      <Container fluid className={styles.functionBtnConatainer}>
         <Dropdown>
           <Dropdown.Toggle>Sort by</Dropdown.Toggle>
           <Dropdown.Menu>
@@ -99,6 +100,10 @@ export default function Home() {
             })}
           </Dropdown.Menu>
         </Dropdown>
+        <div style={{ width: "1%" }} />
+        <AuthorizedContent requiredRole="staff">
+          <Button variant="light">Add product</Button>
+        </AuthorizedContent>
       </Container>
       <Row>
         {products.map((item, index) => {
