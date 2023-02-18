@@ -6,6 +6,8 @@ import {
   Col,
   Container,
   Dropdown,
+  Form,
+  Modal,
   Pagination,
   Ratio,
   Row,
@@ -14,7 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import AuthorizedContent from "../../Component/Auth/authorizedContent";
 import LoadingLayer from "../../Component/LoadingAnimation/layer";
 import { api_endpoint } from "../../config";
-import { setEmail, setUser } from "../../Redux/user";
 import styles from "./style.module.css";
 
 export default function Home() {
