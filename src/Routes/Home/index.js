@@ -6,14 +6,12 @@ import {
   Col,
   Container,
   Dropdown,
-  Form,
-  Modal,
   Pagination,
   Ratio,
   Row,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthorizedContent from "../../Component/Auth/authorizedContent";
 import LoadingLayer from "../../Component/LoadingAnimation/layer";
 import { api_endpoint } from "../../config";
@@ -109,7 +107,7 @@ export default function Home() {
           <Button
             variant="light"
             onClick={() => {
-              navigate("/addProduct");
+              navigate("add");
             }}>
             Add product
           </Button>
@@ -119,7 +117,10 @@ export default function Home() {
         {products.map((item, index) => {
           return (
             <Col lg={2} sm={4} key={index} className={styles.itemContainer}>
-              <Card>
+              <Card
+                onClick={() => {
+                  navigate(`${item._id}`);
+                }}>
                 <Ratio aspectRatio="1x1">
                   <Card.Img variant="top" src={item.thumbnailUrl} />
                 </Ratio>

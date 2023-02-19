@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import axios from "axios";
 
 import Home from "./Routes/Home";
@@ -14,6 +14,7 @@ import store from "./Redux/store";
 import { setUser } from "./Redux/user";
 import EditProduct from "./Routes/ProductEdit";
 import AuthorizedPage from "./Component/Auth/authorizedPage";
+import ProductDetail from "./Routes/ProductDetail";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -54,15 +55,20 @@ function App() {
     <BrowserRouter>
       <NavigationBar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/addProduct"
-          element={
-            <AuthorizedPage requiredRole="staff">
-              <EditProduct />
-            </AuthorizedPage>
-          }
-        />
+        <Route index element={<Navigate to="/product" />} />
+        <Route path="/product">
+          <Route index element={<Home />} />
+          <Route path=":productId" element={<ProductDetail />} />
+          <Route
+            path="add"
+            element={
+              <AuthorizedPage requiredRole="staff">
+                <EditProduct />
+              </AuthorizedPage>
+            }
+          />
+        </Route>
+
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
