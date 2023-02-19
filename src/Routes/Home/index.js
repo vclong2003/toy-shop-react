@@ -121,7 +121,7 @@ export default function Home() {
             <Col lg={2} sm={4} key={index} className={styles.itemContainer}>
               <Card>
                 <Ratio aspectRatio="1x1">
-                  <Card.Img variant="top" src="https://picsum.photos/300/300" />
+                  <Card.Img variant="top" src={item.thumbnailUrl} />
                 </Ratio>
                 <Card.Body>
                   <h6>{item.name}</h6>
