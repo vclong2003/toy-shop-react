@@ -2,7 +2,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Image, Row } from "react-bootstrap";
 import ReactQuill from "react-quill";
+import { UUID } from "uuidjs";
 import { api_endpoint } from "../../config";
+import { uploadFileToFirebase } from "../../Firebase";
 
 export default function EditProduct() {
   const [updating, setUpdating] = useState(false);
@@ -12,22 +14,34 @@ export default function EditProduct() {
     price: 0,
     stock: 0,
     description: "",
-    thumbnailUrl: "https://via.placeholder.com/150 ",
+    thumbnailUrl: "",
   });
-  const [thumbnailFile, setThumbnailFile] = useState();
+  const [thumbnailFile, setThumbnailFile] = useState(null);
 
   const handleAddProducts = async (evt) => {
     evt.preventDefault();
     setLoading(true);
+
+    let thumbnailUrl = null;
+    if (thumbnailFile) {
+      try {
+        thumbnailUrl = await uploadFileToFirebase(
+          `ProductThumbnails/${UUID.generate()}`,
+          thumbnailFile
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     axios
       .post(
         `${api_endpoint}/product`,
         {
-          name: data.name,
-          thumbnailUrl: data.thumbnailUrl,
-          description: data.description,
-          price: data.price,
-          stock: data.stock,
+          ...data,
+          thumbnailUrl: thumbnailUrl
+            ? thumbnailUrl
+            : "https://via.placeholder.com/150",
         },
         { withCredentials: true }
       )
@@ -68,6 +82,7 @@ export default function EditProduct() {
                   <Form.Label>Thumbnail</Form.Label>
                   <Form.Control
                     type="file"
+                    files={thumbnailFile}
                     onChange={(evt) => {
                       setThumbnailFile(evt.target.files[0]);
                     }}
