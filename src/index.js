@@ -60,6 +60,14 @@ function App() {
           <Route index element={<Home />} />
           <Route path=":productId" element={<ProductDetail />} />
           <Route
+            path=":productId/edit"
+            element={
+              <AuthorizedPage requiredRole="staff">
+                <EditProduct />
+              </AuthorizedPage>
+            }
+          />
+          <Route
             path="add"
             element={
               <AuthorizedPage requiredRole="staff">
