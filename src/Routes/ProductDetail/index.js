@@ -31,13 +31,19 @@ export default function ProductDetail() {
     fetchData();
   }, []);
 
-  return (
+  return loading ? (
+    ""
+  ) : (
     <Container className={styles.container}>
       <Row>
         <Col lg={1} />
         <Col lg={4}>
           <Ratio aspectRatio="1x1">
-            <Image src={data.thumbnailUrl} className={styles.thumbNail} />
+            <Image
+              src={data.thumbnailUrl}
+              className={styles.thumbNail}
+              width="100%"
+            />
           </Ratio>
         </Col>
         <Col lg={1} />
