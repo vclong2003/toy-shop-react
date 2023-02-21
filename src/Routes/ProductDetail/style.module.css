@@ -1,5 +1,9 @@
-.container {
-  margin-top: 12px;
+.top {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 3%;
+  background-color: #ccd2e32e;
+  border-radius: 20px;
 }
 
 .thumbNail {
@@ -18,10 +22,12 @@
   font-size: smaller;
 }
 .description {
-  margin-top: 10px;
-  margin-left: 4%;
-  margin-right: 4%;
   margin-bottom: 50px;
+  border-radius: 20px;
+  background-color: #ccd2e32e;
+  padding-top: 2%;
+  padding-left: 3%;
+  padding-right: 3%;
 }
 
 .description p {
@@ -34,4 +40,10 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.editBtnContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }

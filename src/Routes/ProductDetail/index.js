@@ -35,9 +35,8 @@ export default function ProductDetail() {
     ""
   ) : (
     <Container className={styles.container}>
-      <Row>
-        <Col lg={1} />
-        <Col lg={4}>
+      <Row className={styles.top}>
+        <Col lg={5}>
           <Ratio aspectRatio="1x1">
             <Image
               src={data.thumbnailUrl}
@@ -49,9 +48,9 @@ export default function ProductDetail() {
         <Col lg={1} />
         <Col lg={5} className={styles.infoContainer}>
           <Row>
-            <h3>
+            <h4>
               <strong>{data.name}</strong>
-            </h3>
+            </h4>
           </Row>
           <Row>
             <h5>{data.price}$</h5>
@@ -68,8 +67,9 @@ export default function ProductDetail() {
             </Col>
           </Row>
         </Col>
-        <AuthorizedContent requiredRole="staff">
-          <Col lg={1}>
+
+        <Col lg={1} className={styles.editBtnContainer}>
+          <AuthorizedContent requiredRole="staff">
             <Button
               variant="outline-success"
               onClick={() => {
@@ -81,8 +81,8 @@ export default function ProductDetail() {
             <Button variant="outline-danger">
               <i className="bi bi-trash2" />
             </Button>
-          </Col>
-        </AuthorizedContent>
+          </AuthorizedContent>
+        </Col>
       </Row>
       <Row
         className={styles.description}
