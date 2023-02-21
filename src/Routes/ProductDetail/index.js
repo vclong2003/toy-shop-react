@@ -1,7 +1,15 @@
 import styles from "./style.module.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Image, Ratio, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Image,
+  Modal,
+  Ratio,
+  Row,
+} from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { api_endpoint } from "../../config";
 import AuthorizedContent from "../../Component/Auth/authorizedContent";
@@ -11,6 +19,9 @@ export default function ProductDetail() {
   const { productId } = useParams();
   const [loading, setLoading] = useState();
   const [data, setData] = useState({});
+
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchData = () => {
     setLoading(true);
@@ -24,6 +35,20 @@ export default function ProductDetail() {
       })
       .catch((err) => {
         console.log(err);
+      });
+  };
+
+  const handleDeleteProduct = () => {
+    setDeleting(true);
+    axios
+      .delete(`${api_endpoint}/product/${productId}`, { withCredentials: true })
+      .then((res) => {
+        if (res.status === 200) {
+          navigate(-1);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
       });
   };
 
@@ -78,7 +103,11 @@ export default function ProductDetail() {
               <i className="bi bi-pencil" />
             </Button>
             <div style={{ height: "8px" }} />
-            <Button variant="outline-danger">
+            <Button
+              variant="outline-danger"
+              onClick={() => {
+                setDeleteModalVisible(true);
+              }}>
               <i className="bi bi-trash2" />
             </Button>
           </AuthorizedContent>
@@ -87,6 +116,36 @@ export default function ProductDetail() {
       <Row
         className={styles.description}
         dangerouslySetInnerHTML={{ __html: data.description }}></Row>
+      <Modal
+        show={deleteModalVisible}
+        onHide={() => {
+          setDeleteModalVisible(false);
+        }}>
+        <Modal.Body>
+          <h5>Delete this product?</h5>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}>
+            <Button
+              variant="outline-danger"
+              onClick={handleDeleteProduct}
+              disabled={deleting}>
+              {deleting ? "Deleting..." : "Delete"}
+            </Button>
+            <div style={{ width: "5px" }} />
+            <Button
+              variant="outline-secondary"
+              onClick={() => {
+                setDeleteModalVisible(false);
+              }}>
+              Cancel
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </Container>
   );
 }
