@@ -56,7 +56,7 @@ export default function ProductDetail() {
           <Row>
             <h5>{data.price}$</h5>
           </Row>
-          <div style={{ height: "20px" }} />
+          <div style={{ height: "10px" }} />
           <Row>
             <Col lg={6}>
               <Button variant="outline-primary" style={{ width: "100%" }}>

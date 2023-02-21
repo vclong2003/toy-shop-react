@@ -1,5 +1,5 @@
 .container {
-  margin-top: 16px;
+  margin-top: 12px;
 }
 
 .thumbNail {
@@ -18,7 +18,7 @@
   font-size: smaller;
 }
 .description {
-  margin-top: 20px;
+  margin-top: 10px;
   margin-left: 4%;
   margin-right: 4%;
   margin-bottom: 50px;
