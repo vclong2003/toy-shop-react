@@ -125,7 +125,7 @@ export default function Home() {
                   <Card.Img variant="top" src={item.thumbnailUrl} />
                 </Ratio>
                 <Card.Body>
-                  <h6>{item.name}</h6>
+                  <h6 className={styles.toyName}>{item.name}</h6>
                   <p>{item.price}$</p>
                   <div>
                     <i className="bi bi-cart-plus" />

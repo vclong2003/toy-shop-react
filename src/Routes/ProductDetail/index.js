@@ -47,14 +47,14 @@ export default function ProductDetail() {
           </Ratio>
         </Col>
         <Col lg={1} />
-        <Col lg={4} className={styles.infoContainer}>
+        <Col lg={5} className={styles.infoContainer}>
           <Row>
-            <h2>
+            <h3>
               <strong>{data.name}</strong>
-            </h2>
+            </h3>
           </Row>
           <Row>
-            <h4>{data.price}$</h4>
+            <h5>{data.price}$</h5>
           </Row>
           <div style={{ height: "20px" }} />
           <Row>
@@ -71,11 +71,15 @@ export default function ProductDetail() {
         <AuthorizedContent requiredRole="staff">
           <Col lg={1}>
             <Button
-              variant="outline-danger"
+              variant="outline-success"
               onClick={() => {
                 navigate("edit");
               }}>
-              <i className="bi bi-pencil" /> Edit
+              <i className="bi bi-pencil" />
+            </Button>
+            <div style={{ height: "8px" }} />
+            <Button variant="outline-danger">
+              <i className="bi bi-trash2" />
             </Button>
           </Col>
         </AuthorizedContent>

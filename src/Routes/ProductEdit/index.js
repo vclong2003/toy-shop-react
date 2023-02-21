@@ -226,7 +226,25 @@ export default function EditProduct() {
         <Button variant="primary" type="submit" disabled={saving}>
           {saving ? "Saving..." : "Save"}
         </Button>
-        {editMode ? "" : <Button variant="outline-secondary">Clear</Button>}
+        {editMode ? (
+          ""
+        ) : (
+          <Button
+            variant="outline-secondary"
+            onClick={() => {
+              setData({
+                description: "",
+                thumbnailUrl:
+                  "https://via.placeholder.com/500?text=Placeholder",
+                name: "",
+                price: 0,
+                stock: 0,
+              });
+              setThumbnailFile(null);
+            }}>
+            Clear
+          </Button>
+        )}
         <Button
           variant="outline-secondary"
           onClick={() => {
