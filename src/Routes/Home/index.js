@@ -11,10 +11,13 @@ import {
   Row,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import AuthorizedContent from "../../Component/Auth/authorizedContent";
+import AuthorizedPage from "../../Component/Auth/authorizedPage";
 import LoadingLayer from "../../Component/LoadingAnimation/layer";
 import { api_endpoint } from "../../config";
+import ProductDetail from "../ProductDetail";
+import EditProduct from "../ProductEdit";
 import styles from "./style.module.css";
 
 export default function Home() {
@@ -74,71 +77,97 @@ export default function Home() {
     );
   }
 
+  const AllProducts = () => {
+    return (
+      <Container>
+        {loading ? <LoadingLayer /> : ""}
+        <Container fluid className={styles.functionBtnConatainer}>
+          <Dropdown>
+            <Dropdown.Toggle>Sort by</Dropdown.Toggle>
+            <Dropdown.Menu>
+              {sortOptions.map((item, index) => {
+                return (
+                  <Dropdown.Item
+                    key={index}
+                    onClick={() => {
+                      setSorting(item.value);
+                      setActivePage(1);
+                    }}
+                    style={{
+                      background: sorting === item.value ? "#E4E5E6" : "",
+                    }}>
+                    {item.name}
+                  </Dropdown.Item>
+                );
+              })}
+            </Dropdown.Menu>
+          </Dropdown>
+          <div style={{ width: "1%" }} />
+          <AuthorizedContent requiredRole="staff">
+            <Button
+              variant="light"
+              onClick={() => {
+                navigate("add");
+              }}>
+              Add product
+            </Button>
+          </AuthorizedContent>
+        </Container>
+        <Row>
+          {products.map((item, index) => {
+            return (
+              <Col lg={2} sm={4} key={index} className={styles.itemContainer}>
+                <Card
+                  onClick={() => {
+                    navigate(`${item._id}`);
+                  }}
+                  style={{ cursor: "pointer" }}>
+                  <Ratio aspectRatio="1x1">
+                    <Card.Img variant="top" src={item.thumbnailUrl} />
+                  </Ratio>
+                  <Card.Body>
+                    <h6 className={styles.toyName}>{item.name}</h6>
+                    <p>{item.price}$</p>
+                    <div>
+                      <i className="bi bi-cart-plus" />
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+        <Container fluid className={styles.paginationContainer}>
+          <Pagination>{paginationItems}</Pagination>
+        </Container>
+      </Container>
+    );
+  };
+
   useEffect(() => {
     fetchProducts();
   }, [activePage, sorting]);
 
   return (
-    <Container>
-      {loading ? <LoadingLayer /> : ""}
-      <Container fluid className={styles.functionBtnConatainer}>
-        <Dropdown>
-          <Dropdown.Toggle>Sort by</Dropdown.Toggle>
-          <Dropdown.Menu>
-            {sortOptions.map((item, index) => {
-              return (
-                <Dropdown.Item
-                  key={index}
-                  onClick={() => {
-                    setSorting(item.value);
-                    setActivePage(1);
-                  }}
-                  style={{
-                    background: sorting === item.value ? "#E4E5E6" : "",
-                  }}>
-                  {item.name}
-                </Dropdown.Item>
-              );
-            })}
-          </Dropdown.Menu>
-        </Dropdown>
-        <div style={{ width: "1%" }} />
-        <AuthorizedContent requiredRole="staff">
-          <Button
-            variant="light"
-            onClick={() => {
-              navigate("add");
-            }}>
-            Add product
-          </Button>
-        </AuthorizedContent>
-      </Container>
-      <Row>
-        {products.map((item, index) => {
-          return (
-            <Col lg={2} sm={4} key={index} className={styles.itemContainer}>
-              <Card
-                onClick={() => {
-                  navigate(`${item._id}`);
-                }}>
-                <Ratio aspectRatio="1x1">
-                  <Card.Img variant="top" src={item.thumbnailUrl} />
-                </Ratio>
-                <Card.Body>
-                  <h6 className={styles.toyName}>{item.name}</h6>
-                  <p>{item.price}$</p>
-                  <div>
-                    <i className="bi bi-cart-plus" />
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          );
-        })}
-      </Row>
-      <Container fluid className={styles.paginationContainer}>
-        <Pagination>{paginationItems}</Pagination>
-      </Container>
-    </Container>
+    <Routes>
+      <Route index element={<AllProducts />}></Route>
+      <Route path=":productId" element={<ProductDetail />} />
+      <Route
+        path=":productId/edit"
+        element={
+          <AuthorizedPage requiredRole="staff">
+            <EditProduct />
+          </AuthorizedPage>
+        }
+      />
+      <Route
+        path="add"
+        element={
+          <AuthorizedPage requiredRole="staff">
+            <EditProduct />
+          </AuthorizedPage>
+        }
+      />
+    </Routes>
   );
 }

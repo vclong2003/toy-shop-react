@@ -56,27 +56,7 @@ function App() {
       <NavigationBar />
       <Routes>
         <Route index element={<Navigate to="/product" />} />
-        <Route path="/product">
-          <Route index element={<Home />} />
-          <Route path=":productId" element={<ProductDetail />} />
-          <Route
-            path=":productId/edit"
-            element={
-              <AuthorizedPage requiredRole="staff">
-                <EditProduct />
-              </AuthorizedPage>
-            }
-          />
-          <Route
-            path="add"
-            element={
-              <AuthorizedPage requiredRole="staff">
-                <EditProduct />
-              </AuthorizedPage>
-            }
-          />
-        </Route>
-
+        <Route path="/product/*" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
