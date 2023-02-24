@@ -1,11 +1,6 @@
-import {
-  Container,
-  Navbar,
-  Nav,
-  NavDropdown,
-  Button,
-  Badge,
-} from "react-bootstrap";
+import { Button } from "@mui/material";
+import { Container, Navbar, Nav, NavDropdown, Badge } from "react-bootstrap";
+
 import { useSelector } from "react-redux";
 import logout from "../Auth/logout";
 
@@ -19,7 +14,13 @@ export default function NavigationBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto"></Nav>
-          {singedIn ? "" : <Button href="/login">Login</Button>}
+          {singedIn ? (
+            ""
+          ) : (
+            <Button variant="contained" href="/login">
+              Login
+            </Button>
+          )}
           {singedIn ? (
             <NavDropdown
               title={

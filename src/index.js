@@ -12,9 +12,7 @@ import { api_endpoint } from "./config";
 import { Provider, useDispatch } from "react-redux";
 import store from "./Redux/store";
 import { setUser } from "./Redux/user";
-import EditProduct from "./Routes/ProductEdit";
-import AuthorizedPage from "./Component/Auth/authorizedPage";
-import ProductDetail from "./Routes/ProductDetail";
+import Footer from "./Component/Footer";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -60,6 +58,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
