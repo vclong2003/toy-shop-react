@@ -1,3 +1,4 @@
+import { MenuOutlined } from "@mui/icons-material";
 import {
   AppBar,
   Avatar,
@@ -14,12 +15,13 @@ import {
 import { useState } from "react";
 
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import logout from "../Auth/logout";
 
 export default function NavigationBar() {
-  const pages = ["Products", "Pricing", "Blog"];
-  const settings = ["Profile", "Account", "Dashboard", "Logout"];
   const { singedIn, email, role } = useSelector((state) => state.user);
+
+  const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -40,7 +42,12 @@ export default function NavigationBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{
+        backgroundColor: "#FFFFFF",
+        boxShadow: "0 2px 6px 0 rgb(0 0 0 / 12%)",
+      }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -49,49 +56,15 @@ export default function NavigationBar() {
             component="a"
             href="/"
             sx={{
+              color: "black",
               mr: 2,
               display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
+              letterSpacing: "0.1rem",
               textDecoration: "none",
             }}>
-            LOGO
+            ATN toys
           </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"></IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}>
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
 
           <Typography
             variant="h5"
@@ -111,92 +84,68 @@ export default function NavigationBar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}>
-                {page}
-              </Button>
-            ))}
+            <Button
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, display: "block" }}>
+              Test
+            </Button>
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}>
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+          {singedIn ? (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Click to open menu">
+                <IconButton onClick={handleOpenUserMenu}>
+                  <MenuOutlined htmlColor="#646766" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}>
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">Cart</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Button variant="outlined" onClick={logout}>
+                    Logout
+                  </Button>
+                </MenuItem>
+              </Menu>
+            </Box>
+          ) : (
+            ""
+          )}
+          {singedIn ? (
+            ""
+          ) : (
+            <Box display="flex">
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  navigate("/login");
+                }}>
+                Login
+              </Button>
+              <Box width="10px" />
+              <Button variant="contained">Create an account</Button>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
-    // <Navbar bg="light" expand="lg">
-    //   <Container>
-    //     <Navbar.Brand href="/">ATN Toy Shop</Navbar.Brand>
-    //     <Navbar.Toggle aria-controls="basic-navbar-nav" />
-    //     <Navbar.Collapse id="basic-navbar-nav">
-    //       <Nav className="me-auto"></Nav>
-    //       {singedIn ? (
-    //         ""
-    //       ) : (
-    //         <Button variant="contained" href="/login">
-    //           Login
-    //         </Button>
-    //       )}
-    //       {singedIn ? (
-    //         <NavDropdown
-    //           title={
-    //             <>
-    //               {email}{" "}
-    //               {role.includes("staff") ? (
-    //                 <Badge pill bg="info">
-    //                   <i>Staff</i>
-    //                 </Badge>
-    //               ) : (
-    //                 ""
-    //               )}
-    //             </>
-    //           }
-    //           id="basic-nav-dropdown">
-    //           <NavDropdown.Item>Cart</NavDropdown.Item>
-    //           <NavDropdown.Item>Profile</NavDropdown.Item>
-    //           <NavDropdown.Divider />
-    //           <NavDropdown.Item>
-    //             <Button
-    //               onClick={logout}
-    //               style={{ width: "100%" }}
-    //               variant="dark">
-    //               Logout
-    //             </Button>
-    //           </NavDropdown.Item>
-    //         </NavDropdown>
-    //       ) : (
-    //         ""
-    //       )}
-    //     </Navbar.Collapse>
-    //   </Container>
-    // </Navbar>
   );
 }

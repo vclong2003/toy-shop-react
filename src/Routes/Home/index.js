@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -6,6 +7,7 @@ import {
   CardMedia,
   Container,
   Grid,
+  LinearProgress,
   Pagination,
   Typography,
 } from "@mui/material";
@@ -20,7 +22,6 @@ import LoadingLayer from "../../Component/LoadingAnimation/layer";
 import { api_endpoint } from "../../config";
 import ProductDetail from "../ProductDetail";
 import EditProduct from "../ProductEdit";
-import styles from "./style.module.css";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
 
   // For pagination
-  const productsPerPage = 18;
+  const productsPerPage = 16;
   const [pages, setPages] = useState(1);
   const [activePage, setActivePage] = useState(1);
   const paginationItems = [];
@@ -45,6 +46,7 @@ export default function Home() {
   const [sorting, setSorting] = useState("dateAdded_desc");
 
   const fetchProducts = () => {
+    window.scrollTo(0, 0);
     setLoading(true);
     axios
       .get(
@@ -57,7 +59,6 @@ export default function Home() {
           setProducts(res.data.data);
           setPages(Math.ceil(res.data.count / productsPerPage));
           setLoading(false);
-          window.scrollTo(0, 0);
         }
       })
       .catch((err) => {
@@ -65,62 +66,71 @@ export default function Home() {
       });
   };
 
+  useEffect(() => {
+    fetchProducts();
+  }, [activePage, sorting]);
+
   const AllProducts = () => {
     return (
       <Container>
-        {loading ? <LoadingLayer /> : ""}
-        <Container className={styles.functionBtnConatainer}>
-          <div style={{ width: "1%" }} />
+        {loading ? <LinearProgress /> : ""}
+        <Box marginTop="10px" marginBottom="10px">
           <AuthorizedContent requiredRole="staff">
             <Button
               onClick={() => {
                 navigate("add");
-              }}>
+              }}
+              variant="outlined">
               Add product
             </Button>
           </AuthorizedContent>
-        </Container>
-        <Grid container spacing={2}>
+        </Box>
+        <Grid container spacing={3}>
           {products.map((item, index) => {
             return (
-              <Grid item lg={3}>
-                <Card>
-                  <CardMedia sx={{ height: 200 }} image={item.thumbnailUrl} />
+              <Grid item lg={3} key={index} sx={{ cursor: "pointer" }}>
+                <Card variant="outlined">
+                  <CardMedia sx={{ height: 240 }} image={item.thumbnailUrl} />
                   <CardContent>
-                    <Typography variant="h5" component="div">
-                      Lizard
+                    <Typography
+                      variant="body1"
+                      component="div"
+                      whiteSpace="nowrap"
+                      overflow="hidden"
+                      textOverflow="ellipsis">
+                      {item.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Lizards are a widespread group of squamate reptiles, with
-                      over 6,000 species, ranging across all continents except
-                      Antarctica
+                      {item.price}$
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small">Share</Button>
-                    <Button size="small">Learn More</Button>
+                    <Button size="small" variant="contained">
+                      Add to cart
+                    </Button>
                   </CardActions>
                 </Card>
               </Grid>
             );
           })}
         </Grid>
-        <Container className={styles.paginationContainer}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          marginTop="10px"
+          marginBottom="10px">
           <Pagination
+            color="primary"
             count={pages}
             page={activePage}
             onChange={(evt, value) => {
               setActivePage(value);
             }}
           />
-        </Container>
+        </Box>
       </Container>
     );
   };
-
-  useEffect(() => {
-    fetchProducts();
-  }, [activePage, sorting]);
 
   return (
     <Routes>
