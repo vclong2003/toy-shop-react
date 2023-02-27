@@ -3,8 +3,8 @@ import {
   Button,
   Container,
   CssBaseline,
-  FormControlLabel,
   Grid,
+  LinearProgress,
   TextField,
   Typography,
 } from "@mui/material";
@@ -41,7 +41,13 @@ export default function Login() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "baseline",
+        minHeight: "100vh",
+      }}>
       <CssBaseline />
       <Box
         sx={{
@@ -49,7 +55,11 @@ export default function Login() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-        }}>
+          borderRadius: "10px",
+          border: "1px solid #D8D8D8",
+          padding: "3%",
+        }}
+        maxWidth="sm">
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
@@ -96,7 +106,7 @@ export default function Login() {
             </Grid>
             <Grid item>
               <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
+                Sign Up
               </Link>
             </Grid>
           </Grid>

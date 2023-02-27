@@ -1,4 +1,9 @@
 import {
+  AddShoppingCart,
+  ShoppingCart,
+  ShoppingCartCheckout,
+} from "@mui/icons-material";
+import {
   Box,
   Button,
   Card,
@@ -7,6 +12,7 @@ import {
   CardMedia,
   Container,
   Grid,
+  IconButton,
   LinearProgress,
   Pagination,
   Typography,
@@ -35,7 +41,6 @@ export default function Home() {
   const productsPerPage = 16;
   const [pages, setPages] = useState(1);
   const [activePage, setActivePage] = useState(1);
-  const paginationItems = [];
 
   //For sorting
   const sortOptions = [
@@ -72,9 +77,9 @@ export default function Home() {
 
   const AllProducts = () => {
     return (
-      <Container>
+      <Container sx={{ minHeight: "100vh" }}>
         {loading ? <LinearProgress /> : ""}
-        <Box marginTop="10px" marginBottom="10px">
+        <Box marginTop="20px" marginBottom="20px">
           <AuthorizedContent requiredRole="staff">
             <Button
               onClick={() => {
@@ -88,7 +93,12 @@ export default function Home() {
         <Grid container spacing={3}>
           {products.map((item, index) => {
             return (
-              <Grid item lg={3} key={index} sx={{ cursor: "pointer" }}>
+              <Grid
+                item
+                lg={3}
+                key={index}
+                sx={{ cursor: "pointer" }}
+                onClick={() => {}}>
                 <Card variant="outlined">
                   <CardMedia sx={{ height: 240 }} image={item.thumbnailUrl} />
                   <CardContent>
@@ -105,9 +115,9 @@ export default function Home() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" variant="contained">
-                      Add to cart
-                    </Button>
+                    <IconButton>
+                      <AddShoppingCart />
+                    </IconButton>
                   </CardActions>
                 </Card>
               </Grid>
@@ -117,8 +127,8 @@ export default function Home() {
         <Box
           display="flex"
           justifyContent="center"
-          marginTop="10px"
-          marginBottom="10px">
+          marginTop="20px"
+          marginBottom="20px">
           <Pagination
             color="primary"
             count={pages}
