@@ -1,20 +1,21 @@
 import "./styles.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Col,
-  Container,
-  Form,
-  Image,
-  Ratio,
-  Row,
-} from "react-bootstrap";
+
 import ReactQuill from "react-quill";
 import { UUID } from "uuidjs";
 import { api_endpoint } from "../../config";
 import { uploadFileToFirebase } from "../../Firebase";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Grid,
+} from "@mui/material";
 
 export default function EditProduct() {
   const navigate = useNavigate();
@@ -130,26 +131,28 @@ export default function EditProduct() {
     ""
   ) : (
     <Container>
-      <Form onSubmit={editMode ? handleUpdateProduct : handleAddProducts}>
-        <Row>
+      <Box
+        component="form"
+        onSubmit={editMode ? handleUpdateProduct : handleAddProducts}>
+        <Grid>
           {/* Left */}
-          <Col lg={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
+          <Grid lg={6}>
+            <FormGroup className="mb-3">
+              <FormLabel>Name</FormLabel>
+              <FormControl
                 type="text"
                 value={data.name}
                 onChange={(evt) => {
                   setData({ ...data, name: evt.target.value });
                 }}
               />
-            </Form.Group>
-            <Row>
-              <Col lg={7}>
+            </FormGroup>
+            <Grid>
+              <Grid lg={7}>
                 {/* Thumbnail */}
-                <Form.Group className="mb-3">
-                  <Form.Label>Thumbnail</Form.Label>
-                  <Form.Control
+                <FormGroup className="mb-3">
+                  <FormLabel>Thumbnail</FormLabel>
+                  <FormControl
                     type="file"
                     accept="image/*"
                     files={thumbnailFile}
@@ -157,26 +160,24 @@ export default function EditProduct() {
                       setThumbnailFile(evt.target.files[0]);
                     }}
                   />
-                </Form.Group>
-              </Col>
-              <Col lg={5}>
-                <Ratio aspectRatio="1x1">
-                  <Image
-                    src={
-                      thumbnailFile
-                        ? URL.createObjectURL(thumbnailFile)
-                        : data.thumbnailUrl
-                    }
-                    width="100%"
-                  />
-                </Ratio>
-              </Col>
-            </Row>
-            <Row>
-              <Col lg={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Price</Form.Label>
-                  <Form.Control
+                </FormGroup>
+              </Grid>
+              <Grid lg={5}>
+                <image
+                  src={
+                    thumbnailFile
+                      ? URL.createObjectURL(thumbnailFile)
+                      : data.thumbnailUrl
+                  }
+                  width="100%"
+                />
+              </Grid>
+            </Grid>
+            <Grid>
+              <Grid lg={6}>
+                <FormGroup className="mb-3">
+                  <FormLabel>Price</FormLabel>
+                  <FormControl
                     type="number"
                     step="0.01"
                     value={data.price}
@@ -184,26 +185,26 @@ export default function EditProduct() {
                       setData({ ...data, price: evt.target.value });
                     }}
                   />
-                </Form.Group>
-              </Col>
-              <Col lg={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Stock</Form.Label>
-                  <Form.Control
+                </FormGroup>
+              </Grid>
+              <Grid lg={6}>
+                <FormGroup className="mb-3">
+                  <FormLabel>Stock</FormLabel>
+                  <FormControl
                     type="number"
                     value={data.stock}
                     onChange={(evt) => {
                       setData({ ...data, stock: evt.target.value });
                     }}
                   />
-                </Form.Group>
-              </Col>
-            </Row>
-          </Col>
+                </FormGroup>
+              </Grid>
+            </Grid>
+          </Grid>
           {/* Right */}
-          <Col lg={6}>
-            <Form.Group>
-              <Form.Label>Description</Form.Label>
+          <Grid lg={6}>
+            <FormGroup>
+              <FormLabel>Description</FormLabel>
               <ReactQuill
                 theme="snow"
                 value={data.description}
@@ -220,9 +221,9 @@ export default function EditProduct() {
                   ],
                 }}
               />
-            </Form.Group>
-          </Col>
-        </Row>
+            </FormGroup>
+          </Grid>
+        </Grid>
         <Button variant="primary" type="submit" disabled={saving}>
           {saving ? "Saving..." : "Save"}
         </Button>
@@ -252,7 +253,7 @@ export default function EditProduct() {
           }}>
           Cancel
         </Button>
-      </Form>
+      </Box>
     </Container>
   );
 }

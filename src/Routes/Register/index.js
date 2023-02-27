@@ -1,28 +1,30 @@
-import { Button, Container, Form } from "react-bootstrap";
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  FormGroup,
+  FormLabel,
+} from "@mui/material";
 
 export default function Register() {
   return (
     <Container>
-      <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
-        </Form.Group>
+      <Box component="form">
+        <FormGroup className="mb-3" controlId="formBasicEmail">
+          <FormLabel>Email address</FormLabel>
+          <FormControl type="email" placeholder="Enter email" />
+        </FormGroup>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Check me out" />
-        </Form.Group>
+        <FormGroup className="mb-3" controlId="formBasicPassword">
+          <FormLabel>Password</FormLabel>
+          <FormControl type="password" placeholder="Password" />
+        </FormGroup>
+
         <Button variant="primary" type="submit">
           Submit
         </Button>
-      </Form>
+      </Box>
     </Container>
   );
 }

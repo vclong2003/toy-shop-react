@@ -1,18 +1,12 @@
 import styles from "./style.module.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Col,
-  Container,
-  Image,
-  Modal,
-  Ratio,
-  Row,
-} from "react-bootstrap";
+
 import { useNavigate, useParams } from "react-router-dom";
 import { api_endpoint } from "../../config";
 import AuthorizedContent from "../../Component/Auth/authorizedContent";
+import { Button, Container, Dialog, Grid } from "@mui/material";
+import { Box } from "@mui/system";
 
 export default function ProductDetail() {
   const navigate = useNavigate();
@@ -60,40 +54,40 @@ export default function ProductDetail() {
     ""
   ) : (
     <Container className={styles.container}>
-      <Row className={styles.top}>
-        <Col lg={5}>
-          <Ratio aspectRatio="1x1">
-            <Image
+      <Grid className={styles.top} container>
+        <Grid lg={5}>
+          <Box>
+            <image
               src={data.thumbnailUrl}
               className={styles.thumbNail}
               width="100%"
             />
-          </Ratio>
-        </Col>
-        <Col lg={1} />
-        <Col lg={5} className={styles.infoContainer}>
-          <Row>
+          </Box>
+        </Grid>
+        <Grid lg={1} />
+        <Grid lg={5} container className={styles.infoContainer}>
+          <Box>
             <h4>
               <strong>{data.name}</strong>
             </h4>
-          </Row>
-          <Row>
+          </Box>
+          <Box>
             <h5>{data.price}$</h5>
-          </Row>
+          </Box>
           <div style={{ height: "10px" }} />
-          <Row>
-            <Col lg={6}>
+          <Grid container>
+            <Grid lg={6}>
               <Button variant="outline-primary" style={{ width: "100%" }}>
                 Add to cart
               </Button>
-            </Col>
-            <Col lg={4} className={styles.stock}>
+            </Grid>
+            <Grid lg={4} className={styles.stock}>
               {data.stock} items available
-            </Col>
-          </Row>
-        </Col>
+            </Grid>
+          </Grid>
+        </Grid>
 
-        <Col lg={1} className={styles.editBtnContainer}>
+        <Grid lg={1} className={styles.editBtnContainer}>
           <AuthorizedContent requiredRole="staff">
             <Button
               variant="outline-success"
@@ -111,17 +105,17 @@ export default function ProductDetail() {
               <i className="bi bi-trash2" />
             </Button>
           </AuthorizedContent>
-        </Col>
-      </Row>
-      <Row
+        </Grid>
+      </Grid>
+      <Box
         className={styles.description}
-        dangerouslySetInnerHTML={{ __html: data.description }}></Row>
-      <Modal
-        show={deleteModalVisible}
-        onHide={() => {
+        dangerouslySetInnerHTML={{ __html: data.description }}></Box>
+      <Dialog
+        open={deleteModalVisible}
+        onClose={() => {
           setDeleteModalVisible(false);
         }}>
-        <Modal.Body>
+        <Box>
           <h5>Delete this product?</h5>
           <div
             style={{
@@ -144,8 +138,8 @@ export default function ProductDetail() {
               Cancel
             </Button>
           </div>
-        </Modal.Body>
-      </Modal>
+        </Box>
+      </Dialog>
     </Container>
   );
 }

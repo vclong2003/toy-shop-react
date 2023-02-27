@@ -1,15 +1,17 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import {
   Button,
   Card,
-  Col,
+  CardActions,
+  CardContent,
+  CardMedia,
   Container,
-  Dropdown,
+  Grid,
   Pagination,
-  Ratio,
-  Row,
-} from "react-bootstrap";
+  Typography,
+} from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import AuthorizedContent from "../../Component/Auth/authorizedContent";
@@ -63,49 +65,14 @@ export default function Home() {
       });
   };
 
-  // Render pagination items
-  for (let i = 1; i <= pages; i++) {
-    paginationItems.push(
-      <Pagination.Item
-        key={i}
-        active={i === activePage}
-        onClick={() => {
-          setActivePage(i);
-        }}>
-        {i}
-      </Pagination.Item>
-    );
-  }
-
   const AllProducts = () => {
     return (
       <Container>
         {loading ? <LoadingLayer /> : ""}
-        <Container fluid className={styles.functionBtnConatainer}>
-          <Dropdown>
-            <Dropdown.Toggle>Sort by</Dropdown.Toggle>
-            <Dropdown.Menu>
-              {sortOptions.map((item, index) => {
-                return (
-                  <Dropdown.Item
-                    key={index}
-                    onClick={() => {
-                      setSorting(item.value);
-                      setActivePage(1);
-                    }}
-                    style={{
-                      background: sorting === item.value ? "#E4E5E6" : "",
-                    }}>
-                    {item.name}
-                  </Dropdown.Item>
-                );
-              })}
-            </Dropdown.Menu>
-          </Dropdown>
+        <Container className={styles.functionBtnConatainer}>
           <div style={{ width: "1%" }} />
           <AuthorizedContent requiredRole="staff">
             <Button
-              variant="light"
               onClick={() => {
                 navigate("add");
               }}>
@@ -113,32 +80,39 @@ export default function Home() {
             </Button>
           </AuthorizedContent>
         </Container>
-        <Row>
+        <Grid container spacing={2}>
           {products.map((item, index) => {
             return (
-              <Col lg={2} sm={4} key={index} className={styles.itemContainer}>
-                <Card
-                  onClick={() => {
-                    navigate(`${item._id}`);
-                  }}
-                  style={{ cursor: "pointer" }}>
-                  <Ratio aspectRatio="1x1">
-                    <Card.Img variant="top" src={item.thumbnailUrl} />
-                  </Ratio>
-                  <Card.Body>
-                    <h6 className={styles.toyName}>{item.name}</h6>
-                    <p>{item.price}$</p>
-                    <div>
-                      <i className="bi bi-cart-plus" />
-                    </div>
-                  </Card.Body>
+              <Grid item lg={3}>
+                <Card>
+                  <CardMedia sx={{ height: 200 }} image={item.thumbnailUrl} />
+                  <CardContent>
+                    <Typography variant="h5" component="div">
+                      Lizard
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Lizards are a widespread group of squamate reptiles, with
+                      over 6,000 species, ranging across all continents except
+                      Antarctica
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button size="small">Share</Button>
+                    <Button size="small">Learn More</Button>
+                  </CardActions>
                 </Card>
-              </Col>
+              </Grid>
             );
           })}
-        </Row>
-        <Container fluid className={styles.paginationContainer}>
-          <Pagination>{paginationItems}</Pagination>
+        </Grid>
+        <Container className={styles.paginationContainer}>
+          <Pagination
+            count={pages}
+            page={activePage}
+            onChange={(evt, value) => {
+              setActivePage(value);
+            }}
+          />
         </Container>
       </Container>
     );

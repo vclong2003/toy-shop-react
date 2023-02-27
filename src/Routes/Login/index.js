@@ -1,6 +1,17 @@
+import {
+  Box,
+  Button,
+  Container,
+  CssBaseline,
+  FormControlLabel,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import React from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
+
 import { api_endpoint } from "../../config";
 
 export default function Login() {
@@ -30,39 +41,67 @@ export default function Login() {
   };
 
   return (
-    <Container>
-      <Row>
-        <Col lg={4} />
-        <Col lg={4}>
-          <Form onSubmit={handleLogin}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                onChange={(evt) => {
-                  setEmail(evt.target.value);
-                }}
-              />
-            </Form.Group>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            onChange={(evt) => {
+              setEmail(evt.target.value);
+            }}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            onChange={(evt) => {
+              setPassword(evt.target.value);
+            }}
+          />
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                onChange={(evt) => {
-                  setPassword(evt.target.value);
-                }}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Next
-            </Button>
-          </Form>
-        </Col>
-        <Col lg={4} />
-      </Row>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}>
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href="#" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
     </Container>
   );
 }
