@@ -11,11 +11,15 @@ import {
   Box,
   Button,
   Container,
+  CssBaseline,
   FormControl,
   FormGroup,
   FormLabel,
   Grid,
+  Input,
+  TextField,
 } from "@mui/material";
+import { AspectRatio } from "@mui/joy";
 
 export default function EditProduct() {
   const navigate = useNavigate();
@@ -130,17 +134,17 @@ export default function EditProduct() {
   return loading ? (
     ""
   ) : (
-    <Container>
+    <Container sx={{ marginTop: "20px" }}>
+      <CssBaseline />
       <Box
         component="form"
         onSubmit={editMode ? handleUpdateProduct : handleAddProducts}>
         <Grid>
           {/* Left */}
           <Grid lg={6}>
-            <FormGroup className="mb-3">
-              <FormLabel>Name</FormLabel>
-              <FormControl
-                type="text"
+            <FormGroup>
+              <TextField
+                label="Product name"
                 value={data.name}
                 onChange={(evt) => {
                   setData({ ...data, name: evt.target.value });
@@ -150,9 +154,9 @@ export default function EditProduct() {
             <Grid>
               <Grid lg={7}>
                 {/* Thumbnail */}
-                <FormGroup className="mb-3">
+                <FormGroup>
                   <FormLabel>Thumbnail</FormLabel>
-                  <FormControl
+                  <input
                     type="file"
                     accept="image/*"
                     files={thumbnailFile}
@@ -163,21 +167,23 @@ export default function EditProduct() {
                 </FormGroup>
               </Grid>
               <Grid lg={5}>
-                <image
-                  src={
-                    thumbnailFile
-                      ? URL.createObjectURL(thumbnailFile)
-                      : data.thumbnailUrl
-                  }
-                  width="100%"
-                />
+                <AspectRatio ratio="1/1">
+                  <image
+                    src={
+                      thumbnailFile
+                        ? URL.createObjectURL(thumbnailFile)
+                        : data.thumbnailUrl
+                    }
+                    width="100%"
+                  />
+                </AspectRatio>
               </Grid>
             </Grid>
             <Grid>
               <Grid lg={6}>
-                <FormGroup className="mb-3">
-                  <FormLabel>Price</FormLabel>
-                  <FormControl
+                <FormGroup>
+                  <TextField
+                    label="Price"
                     type="number"
                     step="0.01"
                     value={data.price}
@@ -185,12 +191,13 @@ export default function EditProduct() {
                       setData({ ...data, price: evt.target.value });
                     }}
                   />
+                  <FormControl />
                 </FormGroup>
               </Grid>
               <Grid lg={6}>
-                <FormGroup className="mb-3">
-                  <FormLabel>Stock</FormLabel>
-                  <FormControl
+                <FormGroup>
+                  <TextField
+                    label="Stock"
                     type="number"
                     value={data.stock}
                     onChange={(evt) => {
