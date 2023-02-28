@@ -1,11 +1,10 @@
-import styles from "./style.module.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { api_endpoint } from "../../config";
 import AuthorizedContent from "../../Component/Auth/authorizedContent";
-import { Button, Container, Dialog, Grid } from "@mui/material";
+import { Button, Container, CssBaseline, Dialog, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 
 export default function ProductDetail() {
@@ -53,19 +52,16 @@ export default function ProductDetail() {
   return loading ? (
     ""
   ) : (
-    <Container className={styles.container}>
-      <Grid className={styles.top} container>
+    <Container>
+      <CssBaseline />
+      <Grid container>
         <Grid lg={5}>
           <Box>
-            <image
-              src={data.thumbnailUrl}
-              className={styles.thumbNail}
-              width="100%"
-            />
+            <img alt="" src={data.thumbnailUrl} width="100%" />
           </Box>
         </Grid>
         <Grid lg={1} />
-        <Grid lg={5} container className={styles.infoContainer}>
+        <Grid lg={5}>
           <Box>
             <h4>
               <strong>{data.name}</strong>
@@ -81,13 +77,11 @@ export default function ProductDetail() {
                 Add to cart
               </Button>
             </Grid>
-            <Grid lg={4} className={styles.stock}>
-              {data.stock} items available
-            </Grid>
+            <Grid lg={4}>{data.stock} items available</Grid>
           </Grid>
         </Grid>
 
-        <Grid lg={1} className={styles.editBtnContainer}>
+        <Grid lg={1}>
           <AuthorizedContent requiredRole="staff">
             <Button
               variant="outline-success"
@@ -107,9 +101,7 @@ export default function ProductDetail() {
           </AuthorizedContent>
         </Grid>
       </Grid>
-      <Box
-        className={styles.description}
-        dangerouslySetInnerHTML={{ __html: data.description }}></Box>
+      <Box dangerouslySetInnerHTML={{ __html: data.description }}></Box>
       <Dialog
         open={deleteModalVisible}
         onClose={() => {

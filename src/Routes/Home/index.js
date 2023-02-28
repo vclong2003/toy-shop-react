@@ -11,6 +11,7 @@ import {
   CardContent,
   CardMedia,
   Container,
+  CssBaseline,
   Grid,
   IconButton,
   LinearProgress,
@@ -38,7 +39,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
 
   // For pagination
-  const productsPerPage = 16;
+  const productsPerPage = 15;
   const [pages, setPages] = useState(1);
   const [activePage, setActivePage] = useState(1);
 
@@ -77,68 +78,77 @@ export default function Home() {
 
   const AllProducts = () => {
     return (
-      <Container sx={{ minHeight: "100vh" }}>
+      <>
         {loading ? <LinearProgress /> : ""}
-        <Box marginTop="20px" marginBottom="20px">
-          <AuthorizedContent requiredRole="staff">
-            <Button
-              onClick={() => {
-                navigate("add");
+        <Container sx={{ minHeight: "100vh" }}>
+          <CssBaseline />
+          <Box marginTop="20px" marginBottom="20px">
+            <AuthorizedContent requiredRole="staff">
+              <Button
+                onClick={() => {
+                  navigate("add");
+                }}
+                variant="outlined">
+                Add product
+              </Button>
+            </AuthorizedContent>
+          </Box>
+          <Grid container spacing={3}>
+            {products.map((item, index) => {
+              return (
+                <Grid
+                  item
+                  lg={2.4}
+                  key={index}
+                  sx={{
+                    cursor: "pointer",
+                  }}>
+                  <Card
+                    variant="outlined"
+                    sx={{ boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px" }}
+                    onClick={() => {
+                      navigate(item._id);
+                    }}>
+                    <CardMedia sx={{ height: 200 }} image={item.thumbnailUrl} />
+                    <CardContent>
+                      <Typography
+                        variant="body"
+                        component="div"
+                        whiteSpace="nowrap"
+                        overflow="hidden"
+                        textOverflow="ellipsis">
+                        {item.name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {item.price}$
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <IconButton>
+                        <AddShoppingCart />
+                      </IconButton>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              );
+            })}
+          </Grid>
+          <Box
+            display="flex"
+            justifyContent="center"
+            marginTop="20px"
+            marginBottom="20px">
+            <Pagination
+              color="primary"
+              count={pages}
+              page={activePage}
+              onChange={(evt, value) => {
+                setActivePage(value);
               }}
-              variant="outlined">
-              Add product
-            </Button>
-          </AuthorizedContent>
-        </Box>
-        <Grid container spacing={3}>
-          {products.map((item, index) => {
-            return (
-              <Grid
-                item
-                lg={3}
-                key={index}
-                sx={{ cursor: "pointer" }}
-                onClick={() => {}}>
-                <Card variant="outlined">
-                  <CardMedia sx={{ height: 240 }} image={item.thumbnailUrl} />
-                  <CardContent>
-                    <Typography
-                      variant="body1"
-                      component="div"
-                      whiteSpace="nowrap"
-                      overflow="hidden"
-                      textOverflow="ellipsis">
-                      {item.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {item.price}$
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <IconButton>
-                      <AddShoppingCart />
-                    </IconButton>
-                  </CardActions>
-                </Card>
-              </Grid>
-            );
-          })}
-        </Grid>
-        <Box
-          display="flex"
-          justifyContent="center"
-          marginTop="20px"
-          marginBottom="20px">
-          <Pagination
-            color="primary"
-            count={pages}
-            page={activePage}
-            onChange={(evt, value) => {
-              setActivePage(value);
-            }}
-          />
-        </Box>
-      </Container>
+            />
+          </Box>
+        </Container>
+      </>
     );
   };
 
