@@ -40,7 +40,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
 
   // For pagination
-  const productsPerPage = 15;
+  const productsPerPage = 20;
   const [pages, setPages] = useState(1);
   const [activePage, setActivePage] = useState(1);
 

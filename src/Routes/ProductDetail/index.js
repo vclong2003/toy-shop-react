@@ -1,3 +1,4 @@
+import styles from "./styles.module.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -8,7 +9,6 @@ import {
   Button,
   Container,
   CssBaseline,
-  Dialog,
   Grid,
   IconButton,
   Skeleton,
@@ -96,12 +96,13 @@ export default function ProductDetail() {
   ) : (
     <Container>
       <CssBaseline />
-      <Grid container padding="2%" marginTop="10px">
-        <Grid
-          lg={4}
-          boxShadow="rgba(149, 157, 165, 0.2) 0px 8px 24px"
-          borderRadius="10px"
-          overflow="hidden">
+      <Grid
+        container
+        padding="2%"
+        marginTop="15px"
+        bgcolor="#F7F7F7C6"
+        borderRadius="10px">
+        <Grid lg={4} borderRadius="10px" overflow="hidden">
           <AspectRatio ratio="1/1">
             <img alt="" src={data.thumbnailUrl} width="100%" />
           </AspectRatio>
@@ -119,7 +120,10 @@ export default function ProductDetail() {
           <Box display="flex" alignItems="center">
             <Button
               variant="contained"
-              sx={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}>
+              sx={{
+                boxShadow:
+                  "box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;",
+              }}>
               Add to cart
             </Button>
             <Box width="10px" />
@@ -128,7 +132,11 @@ export default function ProductDetail() {
             </Typography>
           </Box>
         </Grid>
-        <Grid lg={1}>
+        <Grid
+          lg={1}
+          display="flex"
+          alignItems="flex-end"
+          justifyContent="flex-end">
           <AuthorizedContent requiredRole="staff">
             <IconButton
               color="info"
@@ -148,7 +156,18 @@ export default function ProductDetail() {
           </AuthorizedContent>
         </Grid>
       </Grid>
-      <Box dangerouslySetInnerHTML={{ __html: data.description }} />
+      <Container
+        dangerouslySetInnerHTML={{ __html: data.description }}
+        className={styles.productDesc}
+        sx={{
+          bgcolor: "#F7F7F7C6",
+          borderRadius: "10px",
+          padding: "2%",
+          marginTop: "25px",
+          wordWrap: "break-word",
+          marginBottom: "50px",
+        }}
+      />
     </Container>
   );
 }

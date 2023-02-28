@@ -43,10 +43,11 @@ export default function NavigationBar() {
 
   return (
     <AppBar
-      position="static"
+      position="sticky"
       sx={{
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#FFFFFF98",
         boxShadow: "0 2px 6px 0 rgb(0 0 0 / 12%)",
+        backdropFilter: "blur(20px)",
       }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
