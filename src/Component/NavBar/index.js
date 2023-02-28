@@ -45,9 +45,9 @@ export default function NavigationBar() {
     <AppBar
       position="sticky"
       sx={{
-        backgroundColor: "#FFFFFF98",
+        backgroundColor: "#FFFFFF8D",
         boxShadow: "0 2px 6px 0 rgb(0 0 0 / 12%)",
-        backdropFilter: "blur(20px)",
+        backdropFilter: "blur(16px)",
       }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -64,16 +64,10 @@ export default function NavigationBar() {
               letterSpacing: "0.1rem",
               textDecoration: "none",
             }}>
-            VCL
+            VCL™
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Button
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, display: "block" }}>
-              Test
-            </Button>
-          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
 
           {singedIn ? (
             <Box sx={{ flexGrow: 0 }}>

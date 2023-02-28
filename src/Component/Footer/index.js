@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { Grid } from "@mui/material";
 
 export default function Footer() {
   return (
@@ -13,7 +14,13 @@ export default function Footer() {
         backgroundColor: "#F8F9FA",
       }}>
       <Container>
-        <Typography>This site is developed by VCL™</Typography>
+        <Grid container spacing={2}>
+          <Grid item lg={4}></Grid>
+          <Grid item lg={4} textAlign="center">
+            <Typography variant="body1">© VCL 2023</Typography>
+          </Grid>
+          <Grid item lg={4}></Grid>
+        </Grid>
       </Container>
     </Box>
   );

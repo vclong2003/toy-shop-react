@@ -9,6 +9,11 @@ import {
   Button,
   Container,
   CssBaseline,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   IconButton,
   Skeleton,
@@ -24,7 +29,7 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState();
   const [data, setData] = useState({});
 
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   const fetchData = () => {
@@ -60,13 +65,14 @@ export default function ProductDetail() {
     return (
       <Container>
         <Grid container padding="2%" marginTop="10px">
-          <Grid lg={4}>
+          <Grid item lg={4}>
             <AspectRatio ratio="1/1">
               <Skeleton variant="rounded" width="100%" />
             </AspectRatio>
           </Grid>
-          <Grid lg={1} />
+          <Grid item lg={1} />
           <Grid
+            item
             lg={6}
             display="flex"
             flexDirection="column"
@@ -77,7 +83,7 @@ export default function ProductDetail() {
             <Box height="40px" />
             <Skeleton variant="rounded" width="20%" />
           </Grid>
-          <Grid lg={1}></Grid>
+          <Grid item lg={1} />
         </Grid>
         <Box paddingLeft="2%" paddingRight="2%" marginTop="10px">
           <Skeleton variant="rounded" width="100%" height="500px" />
@@ -91,83 +97,119 @@ export default function ProductDetail() {
     fetchData();
   }, []);
 
-  return loading ? (
-    <LoadingSkeleton />
-  ) : (
-    <Container>
-      <CssBaseline />
-      <Grid
-        container
-        padding="2%"
-        marginTop="15px"
-        bgcolor="#F7F7F7C6"
-        borderRadius="10px">
-        <Grid lg={4} borderRadius="10px" overflow="hidden">
-          <AspectRatio ratio="1/1">
-            <img alt="" src={data.thumbnailUrl} width="100%" />
-          </AspectRatio>
-        </Grid>
-        <Grid lg={1} />
-        <Grid
-          lg={6}
-          display="flex"
-          flexDirection="column"
-          justifyContent="center">
-          <Typography variant="h5">{data.name}</Typography>
-          <div style={{ height: "10px" }} />
-          <Typography variant="body1">${data.price}</Typography>
-          <div style={{ height: "10px" }} />
-          <Box display="flex" alignItems="center">
-            <Button
-              variant="contained"
-              sx={{
-                boxShadow:
-                  "box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;",
-              }}>
-              Add to cart
-            </Button>
-            <Box width="10px" />
-            <Typography variant="caption">
-              {data.stock} items available
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid
-          lg={1}
-          display="flex"
-          alignItems="flex-end"
-          justifyContent="flex-end">
-          <AuthorizedContent requiredRole="staff">
-            <IconButton
-              color="info"
-              onClick={() => {
-                navigate("edit");
-              }}>
-              <ModeEdit />
-            </IconButton>
-            <div style={{ height: "8px" }} />
-            <IconButton
-              color="error"
-              onClick={() => {
-                setDeleteModalVisible(true);
-              }}>
-              <Delete />
-            </IconButton>
-          </AuthorizedContent>
-        </Grid>
-      </Grid>
-      <Container
-        dangerouslySetInnerHTML={{ __html: data.description }}
-        className={styles.productDesc}
-        sx={{
-          bgcolor: "#F7F7F7C6",
-          borderRadius: "10px",
-          padding: "2%",
-          marginTop: "25px",
-          wordWrap: "break-word",
-          marginBottom: "50px",
-        }}
-      />
-    </Container>
+  return (
+    <Box minHeight="100vh">
+      {loading ? (
+        <LoadingSkeleton />
+      ) : (
+        <Container>
+          <CssBaseline />
+          <Grid
+            container
+            marginTop="30px"
+            padding="2%"
+            boxShadow="rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
+            borderRadius="10px">
+            <Grid
+              item
+              lg={4}
+              borderRadius="10px"
+              overflow="hidden"
+              boxShadow="">
+              <AspectRatio ratio="1/1">
+                <img alt="" src={data.thumbnailUrl} width="100%" />
+              </AspectRatio>
+            </Grid>
+            <Grid item lg={1} />
+            <Grid
+              item
+              lg={6}
+              display="flex"
+              flexDirection="column"
+              justifyContent="center">
+              <Typography variant="h5">{data.name}</Typography>
+              <div style={{ height: "10px" }} />
+              <Typography variant="body1">${data.price}</Typography>
+              <div style={{ height: "10px" }} />
+              <Box display="flex" alignItems="center">
+                <Button
+                  variant="contained"
+                  sx={{
+                    boxShadow:
+                      "box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;",
+                  }}>
+                  Add to cart
+                </Button>
+                <Box width="10px" />
+                <Typography variant="caption">
+                  {data.stock} items available
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid
+              item
+              lg={1}
+              display="flex"
+              alignItems="flex-end"
+              justifyContent="flex-end">
+              <AuthorizedContent requiredRole="staff">
+                <IconButton
+                  color="info"
+                  onClick={() => {
+                    navigate("edit");
+                  }}>
+                  <ModeEdit />
+                </IconButton>
+                <div style={{ height: "8px" }} />
+                <IconButton
+                  color="error"
+                  onClick={() => {
+                    setDeleteDialogVisible(true);
+                  }}>
+                  <Delete />
+                </IconButton>
+              </AuthorizedContent>
+            </Grid>
+          </Grid>
+          <Container
+            dangerouslySetInnerHTML={{ __html: data.description }}
+            className={styles.productDesc}
+            sx={{
+              bgcolor: "#F7F7F7C6",
+              borderRadius: "10px",
+              padding: "2%",
+              marginTop: "25px",
+              wordWrap: "break-word",
+              marginBottom: "50px",
+            }}
+          />
+          <Dialog
+            open={deleteDialogVisible}
+            onClose={() => {
+              setDeleteDialogVisible(false);
+            }}>
+            <DialogTitle>Confirm deletion</DialogTitle>
+            <DialogContent>
+              Do you really want to delete this product?
+            </DialogContent>
+            <DialogActions>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleDeleteProduct}>
+                Delete
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setDeleteDialogVisible(false);
+                }}>
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Container>
+      )}
+    </Box>
   );
 }

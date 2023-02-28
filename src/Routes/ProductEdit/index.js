@@ -12,12 +12,10 @@ import {
   Button,
   Container,
   CssBaseline,
-  FormControl,
-  FormGroup,
-  FormLabel,
   Grid,
-  Input,
+  LinearProgress,
   TextField,
+  Typography,
 } from "@mui/material";
 import { AspectRatio } from "@mui/joy";
 
@@ -125,142 +123,153 @@ export default function EditProduct() {
   };
 
   useEffect(() => {
+    window.scroll(0, 0);
     if (productId) {
       setEditMode(true);
       fetchCurrentProduct();
     }
   }, []);
 
-  return loading ? (
-    ""
-  ) : (
-    <Container sx={{ marginTop: "20px" }}>
+  return (
+    <Box minHeight="100vh">
       <CssBaseline />
-      <Box
-        component="form"
-        onSubmit={editMode ? handleUpdateProduct : handleAddProducts}>
-        <Grid>
-          {/* Left */}
-          <Grid lg={6}>
-            <FormGroup>
-              <TextField
-                label="Product name"
-                value={data.name}
-                onChange={(evt) => {
-                  setData({ ...data, name: evt.target.value });
-                }}
-              />
-            </FormGroup>
-            <Grid>
-              <Grid lg={7}>
-                {/* Thumbnail */}
-                <FormGroup>
-                  <FormLabel>Thumbnail</FormLabel>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    files={thumbnailFile}
+      {loading ? (
+        <LinearProgress />
+      ) : (
+        <Container sx={{ marginTop: "20px" }}>
+          <Box
+            component="form"
+            onSubmit={editMode ? handleUpdateProduct : handleAddProducts}>
+            <Grid container spacing={3}>
+              {/* Left */}
+              <Grid item lg={6}>
+                <Grid item lg={12}>
+                  <TextField
+                    label="Product name"
+                    value={data.name}
                     onChange={(evt) => {
-                      setThumbnailFile(evt.target.files[0]);
+                      setData({ ...data, name: evt.target.value });
                     }}
+                    fullWidth
+                    required
                   />
-                </FormGroup>
+                </Grid>
+                <Grid container marginTop="20px" marginBottom="20px">
+                  <Grid
+                    item
+                    lg={5}
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center">
+                    {/* Thumbnail */}
+                    <Typography variant="body1">Thumbnail</Typography>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      files={thumbnailFile}
+                      onChange={(evt) => {
+                        setThumbnailFile(evt.target.files[0]);
+                      }}
+                    />
+                  </Grid>
+                  <Grid item lg={1} />
+                  <Grid
+                    item
+                    lg={6}
+                    borderRadius="10px"
+                    overflow="hidden"
+                    boxShadow="rgba(0, 0, 0, 0.1) 0px 4px 12px">
+                    <AspectRatio ratio="1/1">
+                      <img
+                        src={
+                          thumbnailFile
+                            ? URL.createObjectURL(thumbnailFile)
+                            : data.thumbnailUrl
+                        }
+                        alt=""
+                      />
+                    </AspectRatio>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2}>
+                  <Grid item lg={6}>
+                    <TextField
+                      label="Price"
+                      type="number"
+                      step="0.01"
+                      value={data.price}
+                      onChange={(evt) => {
+                        setData({ ...data, price: evt.target.value });
+                      }}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item lg={6}>
+                    <TextField
+                      label="Stock"
+                      type="number"
+                      value={data.stock}
+                      onChange={(evt) => {
+                        setData({ ...data, stock: evt.target.value });
+                      }}
+                      fullWidth
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid lg={5}>
-                <AspectRatio ratio="1/1">
-                  <image
-                    src={
-                      thumbnailFile
-                        ? URL.createObjectURL(thumbnailFile)
-                        : data.thumbnailUrl
-                    }
-                    width="100%"
-                  />
-                </AspectRatio>
+              {/* Right */}
+              <Grid item lg={6}>
+                <ReactQuill
+                  theme="snow"
+                  value={data.description}
+                  onChange={(value) => {
+                    setData({ ...data, description: value });
+                  }}
+                  modules={{
+                    toolbar: [
+                      [{ header: [1, 2, 3, false] }],
+                      ["bold", "italic"],
+                      [{ list: "ordered" }, { list: "bullet" }],
+                      ["link", "image"],
+                      ["clean"],
+                    ],
+                  }}
+                />
               </Grid>
             </Grid>
-            <Grid>
-              <Grid lg={6}>
-                <FormGroup>
-                  <TextField
-                    label="Price"
-                    type="number"
-                    step="0.01"
-                    value={data.price}
-                    onChange={(evt) => {
-                      setData({ ...data, price: evt.target.value });
-                    }}
-                  />
-                  <FormControl />
-                </FormGroup>
-              </Grid>
-              <Grid lg={6}>
-                <FormGroup>
-                  <TextField
-                    label="Stock"
-                    type="number"
-                    value={data.stock}
-                    onChange={(evt) => {
-                      setData({ ...data, stock: evt.target.value });
-                    }}
-                  />
-                </FormGroup>
-              </Grid>
-            </Grid>
-          </Grid>
-          {/* Right */}
-          <Grid lg={6}>
-            <FormGroup>
-              <FormLabel>Description</FormLabel>
-              <ReactQuill
-                theme="snow"
-                value={data.description}
-                onChange={(value) => {
-                  setData({ ...data, description: value });
-                }}
-                modules={{
-                  toolbar: [
-                    [{ header: [1, 2, 3, false] }],
-                    ["bold", "italic"],
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    ["link", "image"],
-                    ["clean"],
-                  ],
-                }}
-              />
-            </FormGroup>
-          </Grid>
-        </Grid>
-        <Button variant="primary" type="submit" disabled={saving}>
-          {saving ? "Saving..." : "Save"}
-        </Button>
-        {editMode ? (
-          ""
-        ) : (
-          <Button
-            variant="outline-secondary"
-            onClick={() => {
-              setData({
-                description: "",
-                thumbnailUrl:
-                  "https://via.placeholder.com/500?text=Placeholder",
-                name: "",
-                price: 0,
-                stock: 0,
-              });
-              setThumbnailFile(null);
-            }}>
-            Clear
-          </Button>
-        )}
-        <Button
-          variant="outline-secondary"
-          onClick={() => {
-            navigate(-1);
-          }}>
-          Cancel
-        </Button>
-      </Box>
-    </Container>
+            <Button variant="contained" type="submit" disabled={saving}>
+              {saving ? "Saving..." : "Save"}
+            </Button>
+            {editMode ? (
+              ""
+            ) : (
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  setData({
+                    description: "",
+                    thumbnailUrl:
+                      "https://via.placeholder.com/500?text=Placeholder",
+                    name: "",
+                    price: 0,
+                    stock: 0,
+                  });
+                  setThumbnailFile(null);
+                }}>
+                Clear
+              </Button>
+            )}
+            <Button
+              variant="outlined"
+              color="info"
+              onClick={() => {
+                navigate(-1);
+              }}>
+              Cancel
+            </Button>
+          </Box>
+        </Container>
+      )}
+    </Box>
   );
 }
