@@ -3,6 +3,7 @@ import {
   ShoppingCart,
   ShoppingCartCheckout,
 } from "@mui/icons-material";
+import { AspectRatio } from "@mui/joy";
 import {
   Box,
   Button,
@@ -109,7 +110,9 @@ export default function Home() {
                     onClick={() => {
                       navigate(item._id);
                     }}>
-                    <CardMedia sx={{ height: 200 }} image={item.thumbnailUrl} />
+                    <AspectRatio ratio="1/1">
+                      <CardMedia image={item.thumbnailUrl} />
+                    </AspectRatio>
                     <CardContent>
                       <Typography
                         variant="body"
