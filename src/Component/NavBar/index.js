@@ -95,9 +95,6 @@ export default function NavigationBar() {
                   <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">Cart</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}>
                   <Button variant="outlined" onClick={logout}>
                     Logout
                   </Button>

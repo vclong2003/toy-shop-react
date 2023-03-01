@@ -1,1 +1,1 @@
-export const api_endpoint = "https://one644-api.onrender.com/api";
+export const api_endpoint = "http://127.0.0.1:3000/api";

@@ -17,11 +17,13 @@ import {
   Grid,
   IconButton,
   Skeleton,
+  Tab,
+  Tabs,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { Delete, ModeEdit } from "@mui/icons-material";
-import { AspectRatio } from "@mui/joy";
+import { AspectRatio, TabPanel } from "@mui/joy";
 
 export default function ProductDetail() {
   const navigate = useNavigate();
@@ -109,7 +111,7 @@ export default function ProductDetail() {
             marginTop="30px"
             padding="2%"
             boxShadow="rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-            borderRadius="10px">
+            borderRadius="6px">
             <Grid
               item
               lg={4}
@@ -171,18 +173,21 @@ export default function ProductDetail() {
               </AuthorizedContent>
             </Grid>
           </Grid>
-          <Container
-            dangerouslySetInnerHTML={{ __html: data.description }}
-            className={styles.productDesc}
-            sx={{
-              bgcolor: "#F7F7F7C6",
-              borderRadius: "10px",
-              padding: "2%",
-              marginTop: "25px",
-              wordWrap: "break-word",
-              marginBottom: "50px",
-            }}
-          />
+
+          <Box marginTop="20px" marginBottom="50px">
+            <Tabs value={1}>
+              <Tab label="Product description" value={1} />
+            </Tabs>
+            <Box
+              dangerouslySetInnerHTML={{ __html: data.description }}
+              className={styles.productDesc}
+              padding="1%"
+              sx={{
+                wordWrap: "break-word",
+              }}
+            />
+          </Box>
+
           <Dialog
             open={deleteDialogVisible}
             onClose={() => {
