@@ -12,7 +12,9 @@ import {
   Grid,
   IconButton,
   LinearProgress,
+  MenuItem,
   Pagination,
+  Select,
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -22,7 +24,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import AuthorizedContent from "../../Component/Auth/authorizedContent";
 import AuthorizedPage from "../../Component/Auth/authorizedPage";
-import LoadingLayer from "../../Component/LoadingAnimation/layer";
 import { api_endpoint } from "../../config";
 import ProductDetail from "../ProductDetail";
 import EditProduct from "../ProductEdit";
@@ -44,7 +45,7 @@ export default function Home() {
   const sortOptions = [
     { name: "Newest first", value: "dateAdded_desc" },
     { name: "Low price", value: "price_asc" },
-    { name: "Name A-Z", value: "name_asc" },
+    { name: "Name A to Z", value: "name_asc" },
   ];
   const [sorting, setSorting] = useState("dateAdded_desc");
 
@@ -79,7 +80,26 @@ export default function Home() {
         {loading ? <LinearProgress /> : ""}
         <Container sx={{ minHeight: "100vh" }}>
           <CssBaseline />
-          <Box marginTop="20px" marginBottom="20px">
+          <Box
+            marginTop="20px"
+            marginBottom="20px"
+            display="flex"
+            alignItems="center">
+            <Select
+              variant="standard"
+              value={sorting}
+              onChange={(evt) => {
+                setSorting(evt.target.value);
+              }}>
+              {sortOptions.map((item, index) => {
+                return (
+                  <MenuItem value={item.value} key={index}>
+                    {item.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+            <Box width="1%" />
             <AuthorizedContent requiredRole="staff">
               <Button
                 onClick={() => {
@@ -102,29 +122,31 @@ export default function Home() {
                   }}>
                   <Card
                     variant="outlined"
-                    sx={{ boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px" }}
-                    onClick={() => {
-                      navigate(item._id);
-                    }}>
-                    <AspectRatio ratio="1/1">
-                      <CardMedia image={item.thumbnailUrl} />
-                    </AspectRatio>
-                    <CardContent>
-                      <Typography
-                        variant="body"
-                        component="div"
-                        whiteSpace="nowrap"
-                        overflow="hidden"
-                        textOverflow="ellipsis">
-                        {item.name}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {item.price}$
-                      </Typography>
-                    </CardContent>
+                    sx={{ boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px" }}>
+                    <Box
+                      onClick={() => {
+                        navigate(item._id);
+                      }}>
+                      <AspectRatio ratio="1/1">
+                        <CardMedia image={item.thumbnailUrl} />
+                      </AspectRatio>
+                      <CardContent>
+                        <Typography
+                          variant="body"
+                          component="div"
+                          whiteSpace="nowrap"
+                          overflow="hidden"
+                          textOverflow="ellipsis">
+                          {item.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {item.price}$
+                        </Typography>
+                      </CardContent>
+                    </Box>
                     <CardActions>
                       <IconButton>
-                        <AddShoppingCart />
+                        <AddShoppingCart color="primary" />
                       </IconButton>
                     </CardActions>
                   </Card>
