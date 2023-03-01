@@ -1,4 +1,4 @@
-import { MenuOutlined } from "@mui/icons-material";
+import { MenuOutlined, ShoppingCartOutlined } from "@mui/icons-material";
 import {
   AppBar,
   Avatar,
@@ -23,18 +23,10 @@ export default function NavigationBar() {
 
   const navigate = useNavigate();
 
-  const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
@@ -68,6 +60,12 @@ export default function NavigationBar() {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <IconButton>
+              <ShoppingCartOutlined />
+            </IconButton>
+          </Box>
 
           {singedIn ? (
             <Box sx={{ flexGrow: 0 }}>
@@ -104,10 +102,11 @@ export default function NavigationBar() {
           ) : (
             ""
           )}
+
           {singedIn ? (
             ""
           ) : (
-            <Box display="flex">
+            <Box display="flex" flexGrow="0">
               <Button
                 variant="outlined"
                 onClick={() => {

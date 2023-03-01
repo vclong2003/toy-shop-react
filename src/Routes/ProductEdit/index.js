@@ -13,17 +13,21 @@ import {
   Container,
   CssBaseline,
   Grid,
+  IconButton,
   LinearProgress,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
 import { AspectRatio } from "@mui/joy";
+import { CloseOutlined } from "@mui/icons-material";
 
 export default function EditProduct() {
   const navigate = useNavigate();
   const { productId } = useParams();
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState({
     name: "",
@@ -60,8 +64,10 @@ export default function EditProduct() {
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res.data);
-        setSaving(false);
+        if (res.status === 200) {
+          setSaving(false);
+          setSnackbarVisible(true);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -270,6 +276,23 @@ export default function EditProduct() {
           </Box>
         </Container>
       )}
+      <Snackbar
+        open={snackbarVisible}
+        onClose={() => {
+          setSnackbarVisible(false);
+        }}
+        autoHideDuration={3000}
+        message="Product added"
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        action={
+          <IconButton
+            onClick={() => {
+              setSnackbarVisible(false);
+            }}>
+            <CloseOutlined htmlColor="#FFFFFF" />
+          </IconButton>
+        }
+      />
     </Box>
   );
 }

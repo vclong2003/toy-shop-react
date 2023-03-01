@@ -1,8 +1,4 @@
-import {
-  AddShoppingCart,
-  ShoppingCart,
-  ShoppingCartCheckout,
-} from "@mui/icons-material";
+import { AddShoppingCart, ShoppingCart } from "@mui/icons-material";
 import { AspectRatio } from "@mui/joy";
 import {
   Box,
