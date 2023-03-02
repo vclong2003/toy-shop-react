@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Container,
+  Drawer,
   IconButton,
   Menu,
   MenuItem,
@@ -120,6 +121,7 @@ export default function NavigationBar() {
           )}
         </Toolbar>
       </Container>
+  
     </AppBar>
   );
 }
