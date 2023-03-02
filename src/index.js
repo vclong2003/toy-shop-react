@@ -14,7 +14,7 @@ import store from "./Redux/store";
 import { setUser } from "./Redux/user";
 import { setCartItems } from "./Redux/cart";
 import Footer from "./Component/Footer";
-import Cart from "./Component/Cart";
+import Cart, { fetchCart } from "./Component/Cart";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -37,24 +37,13 @@ function App() {
       .then((res) => {
         if (res.status === 200) {
           dispatch(setUser({ singedIn: true, ...res.data }));
-          getCurrentCart();
+          fetchCart();
         }
       })
       .catch((err) => {
         console.log(err);
       });
     setLoading(false);
-  };
-
-  const getCurrentCart = async () => {
-    await axios
-      .get(`${api_endpoint}/cart`, { withCredentials: true })
-      .then((res) => {
-        if (res.status === 200) {
-          const { items } = res.data;
-          dispatch(setCartItems(items));
-        }
-      });
   };
 
   useEffect(() => {

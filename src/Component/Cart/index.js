@@ -1,13 +1,13 @@
 import {
-  CheckBox,
+  ArrowRightAlt,
   Close,
   Delete,
-  Remove,
-  RemoveCircle,
+  ShoppingCartCheckout,
 } from "@mui/icons-material";
 import { AspectRatio } from "@mui/joy";
 import {
   Box,
+  Button,
   CssBaseline,
   Drawer,
   Grid,
@@ -16,33 +16,14 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { api_endpoint } from "../../config";
 import { closeCart, setCartItems } from "../../Redux/cart";
+import store from "../../Redux/store";
 
 export default function Cart() {
-  const { items, count, open } = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
-
-  const [updatingQuantity, setUpdatingQuantity] = useState(false);
-
-  const handleUpdateItemQuantity = (_id, quantity) => {
-    setUpdatingQuantity(true);
-    axios
-      .put(
-        `${api_endpoint}/cart`,
-        { product: _id, quantity: quantity },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          const { items } = res.data;
-          dispatch(setCartItems(items));
-          setUpdatingQuantity(false);
-        }
-      });
-  };
+  const { items, open } = useSelector((state) => state.cart);
 
   const CartItem = ({ item }) => {
     const { name, thumbnailUrl, price, _id } = item.product;
@@ -51,10 +32,11 @@ export default function Cart() {
     return (
       <Grid
         container
-        padding="2%"
+        padding="3%"
         boxShadow="rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-        borderRadius="6px">
-        <Grid item lg={4} borderRadius="6px" overflow="hidden">
+        borderRadius="4px"
+        marginBottom="12px">
+        <Grid item lg={4} borderRadius="4px" overflow="hidden">
           <AspectRatio ratio="1/1">
             <img alt="" src={thumbnailUrl} width="100%" />
           </AspectRatio>
@@ -70,13 +52,12 @@ export default function Cart() {
               {name}
             </Typography>
             <Typography variant="subtitle2" color="GrayText">
-              ${price}
+              ${price * quantity}
             </Typography>
           </Box>
           <Box display="flex" flexDirection="row" alignItems="center">
             <TextField
               variant="standard"
-              label="Quantity"
               type="number"
               step="0.01"
               min="0"
@@ -84,12 +65,14 @@ export default function Cart() {
               onChange={(evt) => {
                 setQuantity(evt.target.value);
                 setTimeout(() => {
-                  handleUpdateItemQuantity(_id, evt.target.value);
+                  updateCartItemQuantity(_id, evt.target.value);
                 }, 1000);
               }}
-              disabled={updatingQuantity}
             />
-            <IconButton>
+            <IconButton
+              onClick={() => {
+                deleteCartItem(_id);
+              }}>
               <Delete />
             </IconButton>
           </Box>
@@ -103,25 +86,102 @@ export default function Cart() {
       anchor="right"
       open={open}
       onClose={() => {
-        dispatch(closeCart());
+        store.dispatch(closeCart());
       }}
-      sx={{ maxHeight: "100vh", overflowY: "scroll" }}>
+      sx={{ height: "100vh", overflowY: "scroll" }}>
       <CssBaseline />
-      <Box>
+      <Box position="sticky" top="0" zIndex="10" bgcolor="#FFFFFF">
         <IconButton
           onClick={() => {
-            dispatch(closeCart());
+            store.dispatch(closeCart());
           }}>
           <Close />
         </IconButton>
       </Box>
 
-      <Box width="25vw" paddingLeft="4%" paddingRight="4%">
+      <Box
+        width="25vw"
+        paddingLeft="4%"
+        paddingRight="4%"
+        marginTop="15px"
+        marginBottom="15px">
         {items.map((item, index) => {
           console.log(item);
           return <CartItem item={item} key={index} />;
         })}
       </Box>
+
+      <Box
+        position="absolute"
+        bottom="0"
+        zIndex="10"
+        bgcolor="#FFFFFF"
+        paddingTop="15px"
+        paddingBottom="15px"
+        width="100%"
+        paddingLeft="4%"
+        paddingRight="4%">
+        <Button variant="contained" color="primary" fullWidth>
+          Next
+        </Button>
+      </Box>
     </Drawer>
   );
 }
+
+export const fetchCart = async () => {
+  await axios
+    .get(`${api_endpoint}/cart`, { withCredentials: true })
+    .then((res) => {
+      if (res.status === 200) {
+        const { items } = res.data;
+        store.dispatch(setCartItems(items));
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const updateCartItemQuantity = (_id, quantity) => {
+  axios
+    .put(
+      `${api_endpoint}/cart`,
+      { product: _id, quantity: quantity },
+      { withCredentials: true }
+    )
+    .then((res) => {
+      if (res.status === 200) {
+        const { items } = res.data;
+        store.dispatch(setCartItems(items));
+      }
+    });
+};
+
+export const addItemToCart = async (_id) => {
+  await axios
+    .post(`${api_endpoint}/cart`, { product: _id }, { withCredentials: true })
+    .then((res) => {
+      if (res.status === 200) {
+        const { items } = res.data;
+        store.dispatch(setCartItems(items));
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const deleteCartItem = async (_id) => {
+  await axios
+    .delete(`${api_endpoint}/cart/${_id}`, { withCredentials: true })
+    .then((res) => {
+      if (res.status === 200) {
+        const { items } = res.data;
+        store.dispatch(setCartItems(items));
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

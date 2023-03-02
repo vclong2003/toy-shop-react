@@ -1,4 +1,17 @@
-import { MenuOutlined, ShoppingCartOutlined } from "@mui/icons-material";
+import {
+  AccountCircle,
+  AccountTree,
+  ManageAccounts,
+  MenuOutlined,
+  Person,
+  Person2,
+  Person3,
+  Person4,
+  PersonOffOutlined,
+  ShoppingCartOutlined,
+  SupervisorAccount,
+  VerifiedUser,
+} from "@mui/icons-material";
 import {
   AppBar,
   Badge,
@@ -21,7 +34,7 @@ import logout from "../Auth/logout";
 
 export default function NavigationBar() {
   const { singedIn, email, role } = useSelector((state) => state.user);
-  const { items, count } = useSelector((state) => state.cart);
+  const { count } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -68,7 +81,7 @@ export default function NavigationBar() {
                 onClick={() => {
                   dispatch(openCart());
                 }}>
-                <Badge badgeContent={1} color="primary">
+                <Badge badgeContent={count} color="primary">
                   <ShoppingCartOutlined />
                 </Badge>
               </IconButton>
@@ -81,7 +94,7 @@ export default function NavigationBar() {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Click to open menu">
                 <IconButton onClick={handleOpenUserMenu}>
-                  <MenuOutlined htmlColor="#646766" />
+                  <AccountCircle htmlColor="#646766" />
                 </IconButton>
               </Tooltip>
               <Menu

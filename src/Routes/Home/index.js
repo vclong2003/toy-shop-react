@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import AuthorizedContent from "../../Component/Auth/authorizedContent";
 import AuthorizedPage from "../../Component/Auth/authorizedPage";
+import { addItemToCart } from "../../Component/Cart";
 import { api_endpoint } from "../../config";
 import ProductDetail from "../ProductDetail";
 import EditProduct from "../ProductEdit";
@@ -74,6 +75,52 @@ export default function Home() {
     fetchProducts();
   }, [activePage, sorting]);
 
+  const ProductItem = ({ data }) => {
+    const { _id, name, price, thumbnailUrl } = data;
+    return (
+      <Grid
+        item
+        lg={2.4}
+        sx={{
+          cursor: "pointer",
+        }}>
+        <Card
+          variant="outlined"
+          sx={{ boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px" }}>
+          <Box
+            onClick={() => {
+              navigate(_id);
+            }}>
+            <AspectRatio ratio="1/1">
+              <CardMedia image={thumbnailUrl} />
+            </AspectRatio>
+            <CardContent>
+              <Typography
+                variant="body"
+                component="div"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis">
+                {name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                ${price}
+              </Typography>
+            </CardContent>
+          </Box>
+          <CardActions>
+            <IconButton
+              onClick={() => {
+                addItemToCart(_id);
+              }}>
+              <AddShoppingCart color="primary" />
+            </IconButton>
+          </CardActions>
+        </Card>
+      </Grid>
+    );
+  };
+
   const AllProducts = () => {
     return (
       <>
@@ -112,46 +159,7 @@ export default function Home() {
           </Box>
           <Grid container spacing={3}>
             {products.map((item, index) => {
-              return (
-                <Grid
-                  item
-                  lg={2.4}
-                  key={index}
-                  sx={{
-                    cursor: "pointer",
-                  }}>
-                  <Card
-                    variant="outlined"
-                    sx={{ boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px" }}>
-                    <Box
-                      onClick={() => {
-                        navigate(item._id);
-                      }}>
-                      <AspectRatio ratio="1/1">
-                        <CardMedia image={item.thumbnailUrl} />
-                      </AspectRatio>
-                      <CardContent>
-                        <Typography
-                          variant="body"
-                          component="div"
-                          whiteSpace="nowrap"
-                          overflow="hidden"
-                          textOverflow="ellipsis">
-                          {item.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {item.price}$
-                        </Typography>
-                      </CardContent>
-                    </Box>
-                    <CardActions>
-                      <IconButton>
-                        <AddShoppingCart color="primary" />
-                      </IconButton>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              );
+              return <ProductItem data={item} key={index} />;
             })}
           </Grid>
           <Box
