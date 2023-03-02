@@ -9,9 +9,10 @@ import NavigationBar from "./Component/NavBar";
 import Login from "./Routes/Login";
 import Register from "./Routes/Register";
 import { api_endpoint } from "./config";
-import { Provider, useDispatch } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import store from "./Redux/store";
 import { setUser } from "./Redux/user";
+import { setCartItems } from "./Redux/cart";
 import Footer from "./Component/Footer";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -26,15 +27,17 @@ root.render(
 
 function App() {
   const [loading, setLoading] = useState(true);
+
   const dispatch = useDispatch();
+  const { singedIn } = useSelector((state) => state.user);
 
   const getCurrentUser = async () => {
     setLoading(true);
     await axios
       .get(`${api_endpoint}/user`, { withCredentials: true })
-      .then((response) => {
-        if (response.status === 200) {
-          dispatch(setUser({ singedIn: true, ...response.data }));
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(setUser({ singedIn: true, ...res.data }));
         }
       })
       .catch((err) => {
@@ -43,8 +46,20 @@ function App() {
     setLoading(false);
   };
 
+  const getCurrentCart = async () => {
+    // if (!singedIn) return;
+    await axios
+      .get(`${api_endpoint}/cart`, { withCredentials: true })
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(setCartItems({ ...res.data.items }));
+        }
+      });
+  };
+
   useEffect(() => {
     getCurrentUser();
+    getCurrentCart();
   }, []);
 
   return loading ? (

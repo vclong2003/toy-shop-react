@@ -10,7 +10,7 @@ export const cartSlice = createSlice({
     setCartItems: (state, action) => {
       state.items = action.payload;
       state.count = state.items.length;
-      console.log(state);
+      console.log(state.items);
     },
   },
 });
