@@ -85,7 +85,7 @@ export default function Cart() {
                 setQuantity(evt.target.value);
                 setTimeout(() => {
                   handleUpdateItemQuantity(_id, evt.target.value);
-                }, 500);
+                }, 1000);
               }}
               disabled={updatingQuantity}
             />
