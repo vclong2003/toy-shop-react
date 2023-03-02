@@ -1,7 +1,6 @@
 import { MenuOutlined, ShoppingCartOutlined } from "@mui/icons-material";
 import {
   AppBar,
-  Avatar,
   Box,
   Button,
   Container,
@@ -25,13 +24,19 @@ export default function NavigationBar() {
   const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
-
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const [cartVisible, setCartVisible] = useState(false);
+  const handleOpenCart = () => {
+    setCartVisible(true);
+  };
+  const handleCloseCart = () => {
+    setCartVisible(false);
   };
 
   return (
@@ -62,11 +67,15 @@ export default function NavigationBar() {
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
 
-          <Box sx={{ flexGrow: 0 }}>
-            <IconButton>
-              <ShoppingCartOutlined />
-            </IconButton>
-          </Box>
+          {singedIn ? (
+            <Box sx={{ flexGrow: 0 }}>
+              <IconButton onClick={handleOpenCart}>
+                <ShoppingCartOutlined />
+              </IconButton>
+            </Box>
+          ) : (
+            ""
+          )}
 
           {singedIn ? (
             <Box sx={{ flexGrow: 0 }}>
@@ -121,7 +130,10 @@ export default function NavigationBar() {
           )}
         </Toolbar>
       </Container>
-  
+
+      <Drawer anchor="right" open={cartVisible} onClose={handleCloseCart}>
+        <Box>Test</Box>
+      </Drawer>
     </AppBar>
   );
 }
