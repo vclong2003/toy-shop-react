@@ -1,10 +1,10 @@
 import { MenuOutlined, ShoppingCartOutlined } from "@mui/icons-material";
 import {
   AppBar,
+  Badge,
   Box,
   Button,
   Container,
-  Drawer,
   IconButton,
   Menu,
   MenuItem,
@@ -14,12 +14,15 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { openCart } from "../../Redux/cart";
 import logout from "../Auth/logout";
 
 export default function NavigationBar() {
   const { singedIn, email, role } = useSelector((state) => state.user);
+  const { items, count } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -29,14 +32,6 @@ export default function NavigationBar() {
   };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
-  };
-
-  const [cartVisible, setCartVisible] = useState(false);
-  const handleOpenCart = () => {
-    setCartVisible(true);
-  };
-  const handleCloseCart = () => {
-    setCartVisible(false);
   };
 
   return (
@@ -62,15 +57,20 @@ export default function NavigationBar() {
               letterSpacing: "0.1rem",
               textDecoration: "none",
             }}>
-            VCL™
+            ATN toys
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
 
           {singedIn ? (
             <Box sx={{ flexGrow: 0 }}>
-              <IconButton onClick={handleOpenCart}>
-                <ShoppingCartOutlined />
+              <IconButton
+                onClick={() => {
+                  dispatch(openCart());
+                }}>
+                <Badge badgeContent={1} color="primary">
+                  <ShoppingCartOutlined />
+                </Badge>
               </IconButton>
             </Box>
           ) : (
@@ -130,10 +130,6 @@ export default function NavigationBar() {
           )}
         </Toolbar>
       </Container>
-
-      <Drawer anchor="right" open={cartVisible} onClose={handleCloseCart}>
-        <Box>Test</Box>
-      </Drawer>
     </AppBar>
   );
 }

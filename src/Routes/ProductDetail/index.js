@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { Delete, ModeEdit } from "@mui/icons-material";
-import { AspectRatio, TabPanel } from "@mui/joy";
+import { AspectRatio } from "@mui/joy";
 
 export default function ProductDetail() {
   const navigate = useNavigate();
