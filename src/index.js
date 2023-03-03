@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import axios from "axios";
 
 import Home from "./Routes/Home";
 import NavigationBar from "./Component/NavBar";
 import Login from "./Routes/Login";
 import Register from "./Routes/Register";
-import { api_endpoint } from "./config";
-import { Provider, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import store from "./Redux/store";
-import { setUser } from "./Redux/user";
-import { setCartItems } from "./Redux/cart";
 import Footer from "./Component/Footer";
-import Cart, { fetchCart } from "./Component/Cart";
+import Cart from "./Component/Cart";
+import { getCurrentUser } from "./Component/User";
+import Checkout from "./Routes/Order/checkOut";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -27,38 +25,18 @@ root.render(
 );
 
 function App() {
-  const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch();
-
-  const getCurrentUser = async () => {
-    setLoading(true);
-    await axios
-      .get(`${api_endpoint}/user`, { withCredentials: true })
-      .then((res) => {
-        if (res.status === 200) {
-          dispatch(setUser({ singedIn: true, ...res.data }));
-          fetchCart();
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    setLoading(false);
-  };
-
   useEffect(() => {
     getCurrentUser();
   }, []);
 
-  return loading ? (
-    ""
-  ) : (
+  return (
     <BrowserRouter>
       <NavigationBar />
       <Cart />
       <Routes>
         <Route index element={<Navigate to="/product" />} />
         <Route path="/product/*" element={<Home />} />
+        <Route path="/checkout" element={<Checkout />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>

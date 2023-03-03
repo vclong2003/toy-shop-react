@@ -18,12 +18,14 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { api_endpoint } from "../../config";
 import { closeCart, setCartItems } from "../../Redux/cart";
 import store from "../../Redux/store";
 
 export default function Cart() {
-  const { items, open } = useSelector((state) => state.cart);
+  const { items, open, count } = useSelector((state) => state.cart);
+  const navigate = useNavigate();
 
   const CartItem = ({ item }) => {
     const { name, thumbnailUrl, price, _id } = item.product;
@@ -90,7 +92,12 @@ export default function Cart() {
       }}
       sx={{ height: "100vh", overflowY: "scroll" }}>
       <CssBaseline />
-      <Box position="sticky" top="0" zIndex="10" bgcolor="#FFFFFF">
+      <Box
+        position="sticky"
+        top="0"
+        marginBottom="auto"
+        zIndex="10"
+        bgcolor="#FFFFFF">
         <IconButton
           onClick={() => {
             store.dispatch(closeCart());
@@ -99,32 +106,38 @@ export default function Cart() {
         </IconButton>
       </Box>
 
-      <Box
-        width="25vw"
-        paddingLeft="4%"
-        paddingRight="4%"
-        marginTop="15px"
-        marginBottom="15px">
+      <Box width="25vw" paddingLeft="4%" paddingRight="4%" marginTop="5px">
         {items.map((item, index) => {
-          console.log(item);
           return <CartItem item={item} key={index} />;
         })}
       </Box>
 
-      <Box
-        position="absolute"
-        bottom="0"
-        zIndex="10"
-        bgcolor="#FFFFFF"
-        paddingTop="15px"
-        paddingBottom="15px"
-        width="100%"
-        paddingLeft="4%"
-        paddingRight="4%">
-        <Button variant="contained" color="primary" fullWidth>
-          Next
-        </Button>
-      </Box>
+      {count === 0 ? (
+        ""
+      ) : (
+        <Box
+          position="sticky"
+          marginTop="auto"
+          bottom="0"
+          zIndex="10"
+          bgcolor="#FFFFFF"
+          paddingTop="10px"
+          paddingBottom="10px"
+          width="100%"
+          paddingLeft="5%"
+          paddingRight="5%">
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={() => {
+              store.dispatch(closeCart());
+              navigate("/checkout");
+            }}>
+            Checkout
+          </Button>
+        </Box>
+      )}
     </Drawer>
   );
 }
