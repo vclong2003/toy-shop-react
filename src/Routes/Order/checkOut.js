@@ -1,10 +1,6 @@
 import {
-  AppBar,
   Button,
-  Checkbox,
   Container,
-  CssBaseline,
-  FormControlLabel,
   Grid,
   Paper,
   Step,
@@ -14,12 +10,32 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
+import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import _ from "underscore";
+import { getCurrentUser } from "../../Component/User";
+import { api_endpoint } from "../../config";
 
 export default function Checkout() {
   const { shippingAddress } = useSelector((state) => state.user);
-  const [formData, setFormData] = useState({ ...shippingAddress });
+  const [orderData, setOrderData] = useState({
+    shippingAddress: {},
+    paymentMethod: "",
+  });
+  const paymentMethod = [
+    {
+      name: "Cash on Delivery",
+      description: "Pays at the time of delivery",
+      value: "COD",
+    },
+    {
+      name: "Cash on Delivery",
+      description: "FREE SHIPPING",
+      value: "Bank transfer",
+    },
+  ];
+
   const steps = [
     { name: "Shipping address", component: <AddressForm /> },
     { name: "Select payment method", component: <PaymentMethod /> },
@@ -36,14 +52,23 @@ export default function Checkout() {
   };
 
   function AddressForm() {
+    const [formData, setFormData] = useState({ ...shippingAddress });
+
+    const handleSubmitForm = (evt) => {
+      evt.preventDefault();
+      setOrderData({ ...orderData, shippingAddress: { ...formData } });
+      handleNext();
+    };
+
     return (
-      <Box>
+      <Box component="form" onSubmit={handleSubmitForm}>
         <Typography variant="h6" gutterBottom>
           Shipping address
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
             <TextField
+              type="text"
               required
               label="First name"
               fullWidth
@@ -56,6 +81,7 @@ export default function Checkout() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
+              type="text"
               required
               label="Last name"
               fullWidth
@@ -65,6 +91,7 @@ export default function Checkout() {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              type="text"
               required
               label="Phone number"
               fullWidth
@@ -74,6 +101,7 @@ export default function Checkout() {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              type="text"
               required
               label="Address"
               fullWidth
@@ -83,6 +111,7 @@ export default function Checkout() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
+              type="text"
               required
               label="City"
               fullWidth
@@ -92,6 +121,7 @@ export default function Checkout() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
+              type="text"
               label="State/Province"
               fullWidth
               variant="standard"
@@ -100,6 +130,7 @@ export default function Checkout() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
+              type="text"
               required
               label="Zip / Postal code"
               fullWidth
@@ -109,12 +140,18 @@ export default function Checkout() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
+              type="text"
               required
               label="Country"
               fullWidth
               variant="standard"
               value={formData.country}
             />
+          </Grid>
+          <Grid item xs={12}>
+            <Button variant="contained" fullWidth type="submit">
+              Next
+            </Button>
           </Grid>
         </Grid>
       </Box>
@@ -130,10 +167,7 @@ export default function Checkout() {
   }
 
   return (
-    <Container
-      component="main"
-      maxWidth="sm"
-      sx={{ mb: 4, minHeight: "100vh" }}>
+    <Container component="main" maxWidth="sm" sx={{ minHeight: "100vh" }}>
       <Paper
         variant="outlined"
         sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 }, borderRadius: "6px" }}>
@@ -148,34 +182,11 @@ export default function Checkout() {
           ))}
         </Stepper>
         {activeStep === steps.length ? (
-          <>
-            <Typography variant="h5" gutterBottom>
-              Thank you for your order.
-            </Typography>
-            <Typography variant="subtitle1">
-              Your order number is #2001539. We have emailed your order
-              confirmation, and will send you an update when your order has
-              shipped.
-            </Typography>
-          </>
+          <Typography variant="h5" gutterBottom>
+            Thank you for your order.
+          </Typography>
         ) : (
-          <>
-            {steps[activeStep].component}
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              {activeStep !== 0 && (
-                <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                  Back
-                </Button>
-              )}
-
-              <Button
-                variant="contained"
-                onClick={handleNext}
-                sx={{ mt: 3, ml: 1 }}>
-                {activeStep === steps.length - 1 ? "Place order" : "Next"}
-              </Button>
-            </Box>
-          </>
+          <>{steps[activeStep].component}</>
         )}
       </Paper>
     </Container>

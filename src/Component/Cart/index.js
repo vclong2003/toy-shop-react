@@ -106,7 +106,7 @@ export default function Cart() {
         </IconButton>
       </Box>
 
-      <Box width="25vw" paddingLeft="4%" paddingRight="4%" marginTop="5px">
+      <Box width="30vw" paddingLeft="5%" paddingRight="5%" marginTop="5px">
         {items.map((item, index) => {
           return <CartItem item={item} key={index} />;
         })}
