@@ -15,8 +15,11 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function Checkout() {
+  const { shippingAddress } = useSelector((state) => state.user);
+  const [formData, setFormData] = useState({ ...shippingAddress });
   const steps = [
     { name: "Shipping address", component: <AddressForm /> },
     { name: "Select payment method", component: <PaymentMethod /> },
@@ -34,7 +37,7 @@ export default function Checkout() {
 
   function AddressForm() {
     return (
-      <>
+      <Box>
         <Typography variant="h6" gutterBottom>
           Shipping address
         </Typography>
@@ -42,98 +45,79 @@ export default function Checkout() {
           <Grid item xs={12} sm={6}>
             <TextField
               required
-              id="firstName"
-              name="firstName"
               label="First name"
               fullWidth
-              autoComplete="given-name"
               variant="standard"
+              value={formData.firstName}
+              onChange={(evt) => {
+                setFormData({ ...formData, firstName: evt.target.value });
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               required
-              id="lastName"
-              name="lastName"
               label="Last name"
               fullWidth
-              autoComplete="family-name"
               variant="standard"
+              value={formData.lastName}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               required
-              id="address1"
-              name="address1"
-              label="Address line 1"
+              label="Phone number"
               fullWidth
-              autoComplete="shipping address-line1"
               variant="standard"
+              value={formData.phone}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
-              id="address2"
-              name="address2"
-              label="Address line 2"
+              required
+              label="Address"
               fullWidth
-              autoComplete="shipping address-line2"
               variant="standard"
+              value={formData.detailedAddress}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               required
-              id="city"
-              name="city"
               label="City"
               fullWidth
-              autoComplete="shipping address-level2"
               variant="standard"
+              value={formData.city}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
-              id="state"
-              name="state"
-              label="State/Province/Region"
+              label="State/Province"
               fullWidth
               variant="standard"
+              value={formData.state}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               required
-              id="zip"
-              name="zip"
               label="Zip / Postal code"
               fullWidth
-              autoComplete="shipping postal-code"
               variant="standard"
+              value={formData.postalCode}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               required
-              id="country"
-              name="country"
               label="Country"
               fullWidth
-              autoComplete="shipping country"
               variant="standard"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Checkbox color="secondary" name="saveAddress" value="yes" />
-              }
-              label="Use this address for payment details"
+              value={formData.country}
             />
           </Grid>
         </Grid>
-      </>
+      </Box>
     );
   }
 
@@ -156,7 +140,7 @@ export default function Checkout() {
         <Typography component="h1" variant="h4" align="center">
           Checkout
         </Typography>
-        <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+        <Stepper alternativeLabel activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
           {steps.map((step) => (
             <Step key={step.name}>
               <StepLabel>{step.name}</StepLabel>

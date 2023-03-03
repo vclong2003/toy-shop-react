@@ -7,14 +7,16 @@ export const userSlice = createSlice({
     email: "",
     role: [],
     id: "",
+    shippingAddress: {},
   },
   reducers: {
     setUser: (state, action) => {
-      const { singedIn, email, role, id } = action.payload;
+      const { singedIn, email, role, id, shippingAddress } = action.payload;
       state.singedIn = singedIn;
       state.email = email;
       state.role = role;
       state.id = id;
+      state.shippingAddress = shippingAddress;
     },
   },
 });
