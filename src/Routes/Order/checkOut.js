@@ -1,8 +1,15 @@
 import {
   Button,
   Container,
+  CssBaseline,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
   Grid,
   Paper,
+  Radio,
+  RadioGroup,
   Step,
   StepLabel,
   Stepper,
@@ -19,19 +26,20 @@ import { api_endpoint } from "../../config";
 
 export default function Checkout() {
   const { shippingAddress } = useSelector((state) => state.user);
+  const { items } = useSelector((state) => state.cart);
   const [orderData, setOrderData] = useState({
     shippingAddress: {},
     paymentMethod: "",
   });
-  const paymentMethod = [
+  const paymentMethods = [
     {
       name: "Cash on Delivery",
       description: "Pays at the time of delivery",
       value: "COD",
     },
     {
-      name: "Cash on Delivery",
-      description: "FREE SHIPPING",
+      name: "Bank transfer (FREE SHIPPING)",
+      description: "We will call you later to process",
       value: "Bank transfer",
     },
   ];
@@ -45,10 +53,12 @@ export default function Checkout() {
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
+    window.scroll(0, 0);
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
+    window.scroll(0, 0);
   };
 
   function AddressForm() {
@@ -159,7 +169,51 @@ export default function Checkout() {
   }
 
   function PaymentMethod() {
-    return <Box></Box>;
+    const handleSubmit = (evt) => {
+      evt.preventDefault();
+      setOrderData({ ...orderData, paymentMethod: evt.target.method.value });
+      handleNext();
+    };
+    return (
+      <Box
+        component="form"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        onSubmit={handleSubmit}>
+        <Typography variant="h6" marginBottom="10px">
+          Payment method
+        </Typography>
+        <RadioGroup name="method">
+          {paymentMethods.map((item, index) => {
+            return (
+              <Box
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                key={index}
+                marginBottom="15px">
+                <Radio value={item.value} required />
+                <Box>
+                  <Typography variant="body1">{item.name}</Typography>
+                  <Typography variant="caption" color="GrayText">
+                    {item.description}
+                  </Typography>
+                </Box>
+              </Box>
+            );
+          })}
+        </RadioGroup>
+        <Box display="flex" justifyContent="space-between">
+          <Button onClick={handleBack} variant="outlined">
+            Back
+          </Button>
+          <Button type="submit" variant="contained">
+            Next
+          </Button>
+        </Box>
+      </Box>
+    );
   }
 
   function ReviewOrder() {
@@ -168,6 +222,7 @@ export default function Checkout() {
 
   return (
     <Container component="main" maxWidth="sm" sx={{ minHeight: "100vh" }}>
+      <CssBaseline />
       <Paper
         variant="outlined"
         sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 }, borderRadius: "6px" }}>
