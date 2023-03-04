@@ -10,7 +10,7 @@ export default function AuthorizedPage({ children, requiredRole }) {
     return <Navigate to="/login" />;
   }
 
-  if (!role.includes(requiredRole)) {
+  if (requiredRole && !role.includes(requiredRole)) {
     setTimeout(() => {
       navigate("/");
     }, 1000);

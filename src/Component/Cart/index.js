@@ -1,9 +1,4 @@
-import {
-  ArrowRightAlt,
-  Close,
-  Delete,
-  ShoppingCartCheckout,
-} from "@mui/icons-material";
+import { Close, Delete } from "@mui/icons-material";
 import { AspectRatio } from "@mui/joy";
 import {
   Box,
@@ -92,12 +87,7 @@ export default function Cart() {
       }}
       sx={{ height: "100vh", overflowY: "scroll" }}>
       <CssBaseline />
-      <Box
-        position="sticky"
-        top="0"
-        marginBottom="auto"
-        zIndex="10"
-        bgcolor="#FFFFFF">
+      <Box position="sticky" top="0" zIndex="10" bgcolor="#FFFFFF">
         <IconButton
           onClick={() => {
             store.dispatch(closeCart());

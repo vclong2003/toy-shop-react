@@ -1,11 +1,9 @@
+import { AspectRatio } from "@mui/joy";
 import {
   Button,
   Container,
   CssBaseline,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
+  Divider,
   Grid,
   Paper,
   Radio,
@@ -18,15 +16,18 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import _ from "underscore";
+import AuthorizedPage from "../../Component/Auth/authorizedPage";
 import { getCurrentUser } from "../../Component/User";
 import { api_endpoint } from "../../config";
 
 export default function Checkout() {
+  const navigate = useNavigate();
   const { shippingAddress } = useSelector((state) => state.user);
-  const { items } = useSelector((state) => state.cart);
+  const { items, count } = useSelector((state) => state.cart);
   const [orderData, setOrderData] = useState({
     shippingAddress: {},
     paymentMethod: "",
@@ -53,12 +54,28 @@ export default function Checkout() {
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
-    window.scroll(0, 0);
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
-    window.scroll(0, 0);
+  };
+
+  const handleCreateOrder = () => {
+    axios
+      .post(
+        `${api_endpoint}/order`,
+        { ...orderData },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          getCurrentUser();
+          handleNext();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   function AddressForm() {
@@ -107,6 +124,9 @@ export default function Checkout() {
               fullWidth
               variant="standard"
               value={formData.phone}
+              onChange={(evt) => {
+                setFormData({ ...formData, phone: evt.target.value });
+              }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -117,6 +137,9 @@ export default function Checkout() {
               fullWidth
               variant="standard"
               value={formData.detailedAddress}
+              onChange={(evt) => {
+                setFormData({ ...formData, detailedAddress: evt.target.value });
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -127,6 +150,9 @@ export default function Checkout() {
               fullWidth
               variant="standard"
               value={formData.city}
+              onChange={(evt) => {
+                setFormData({ ...formData, city: evt.target.value });
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -136,6 +162,9 @@ export default function Checkout() {
               fullWidth
               variant="standard"
               value={formData.state}
+              onChange={(evt) => {
+                setFormData({ ...formData, state: evt.target.value });
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -146,6 +175,9 @@ export default function Checkout() {
               fullWidth
               variant="standard"
               value={formData.postalCode}
+              onChange={(evt) => {
+                setFormData({ ...formData, postalCode: evt.target.value });
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -156,6 +188,9 @@ export default function Checkout() {
               fullWidth
               variant="standard"
               value={formData.country}
+              onChange={(evt) => {
+                setFormData({ ...formData, country: evt.target.value });
+              }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -217,33 +252,140 @@ export default function Checkout() {
   }
 
   function ReviewOrder() {
-    return <Box></Box>;
+    let total = 0;
+    return (
+      <Box>
+        <Box>
+          {items.map((item, index) => {
+            total += item.product.price * item.quantity;
+
+            return (
+              <Box key={index} marginBottom="10px">
+                <Grid container marginBottom="5px">
+                  <Grid item lg={2} borderRadius="4px" overflow="hidden">
+                    <AspectRatio ratio="1/1">
+                      <img
+                        alt=""
+                        src={item.product.thumbnailUrl}
+                        width="100%"
+                      />
+                    </AspectRatio>
+                  </Grid>
+                  <Grid item lg={0.5} />
+                  <Grid item lg={8}>
+                    <Typography
+                      variant="body1"
+                      whiteSpace="nowrap"
+                      overflow="hidden"
+                      textOverflow="ellipsis">
+                      {item.product.name}
+                    </Typography>
+                    <Typography variant="subtitle2" color="GrayText">
+                      ${item.product.price}
+                    </Typography>
+                  </Grid>
+                  <Grid item lg={0.5} />
+                  <Grid item lg={1}>
+                    x{item.quantity}
+                  </Grid>
+                </Grid>
+                <Divider />
+              </Box>
+            );
+          })}
+        </Box>
+        <Box display="flex" justifyContent="space-between">
+          <Typography variant="h5">Total:</Typography>
+          <Typography variant="h5">${total.toFixed(2)}</Typography>
+        </Box>
+
+        <Grid container marginTop="15px">
+          <Grid item lg={7}>
+            <Typography variant="h6">Shipping</Typography>
+            <Typography variant="body2">
+              {orderData.shippingAddress.firstName +
+                " " +
+                orderData.shippingAddress.lastName}
+            </Typography>
+            <Typography variant="body2">
+              {orderData.shippingAddress.phone}
+            </Typography>
+            <Typography variant="body2">
+              {orderData.shippingAddress.detailedAddress +
+                ", " +
+                orderData.shippingAddress.city}
+            </Typography>
+          </Grid>
+          <Grid item lg={5}>
+            <Typography variant="h6">Payment</Typography>
+            <Typography variant="body2">{orderData.paymentMethod}</Typography>
+          </Grid>
+        </Grid>
+
+        <Grid container marginTop="20px">
+          <Grid item lg={2}>
+            <Button fullWidth variant="outlined" onClick={handleBack}>
+              Back
+            </Button>
+          </Grid>
+          <Grid item lg={5} />
+          <Grid item lg={5}>
+            <Button fullWidth variant="contained" onClick={handleCreateOrder}>
+              Place order
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+    );
   }
 
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, [activeStep]);
+
   return (
-    <Container component="main" maxWidth="sm" sx={{ minHeight: "100vh" }}>
-      <CssBaseline />
-      <Paper
-        variant="outlined"
-        sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 }, borderRadius: "6px" }}>
-        <Typography component="h1" variant="h4" align="center">
-          Checkout
-        </Typography>
-        <Stepper alternativeLabel activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-          {steps.map((step) => (
-            <Step key={step.name}>
-              <StepLabel>{step.name}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        {activeStep === steps.length ? (
-          <Typography variant="h5" gutterBottom>
-            Thank you for your order.
+    <AuthorizedPage>
+      <Container component="main" maxWidth="sm" sx={{ minHeight: "100vh" }}>
+        <CssBaseline />
+        <Paper
+          variant="outlined"
+          sx={{
+            my: { xs: 3, md: 6 },
+            p: { xs: 2, md: 3 },
+            borderRadius: "6px",
+          }}>
+          <Typography component="h1" variant="h4" align="center">
+            Checkout
           </Typography>
-        ) : (
-          <>{steps[activeStep].component}</>
-        )}
-      </Paper>
-    </Container>
+          <Stepper
+            alternativeLabel
+            activeStep={activeStep}
+            sx={{ pt: 3, pb: 5 }}>
+            {steps.map((step) => (
+              <Step key={step.name}>
+                <StepLabel>{step.name}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          {activeStep === steps.length ? (
+            <>
+              <Typography variant="h5" gutterBottom textAlign="center">
+                Your order has been placed, thank you for using our service!
+              </Typography>
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={() => {
+                  navigate("/product");
+                }}>
+                Continue shopping
+              </Button>
+            </>
+          ) : (
+            <>{steps[activeStep].component}</>
+          )}
+        </Paper>
+      </Container>
+    </AuthorizedPage>
   );
 }
