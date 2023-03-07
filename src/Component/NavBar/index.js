@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   IconButton,
   Menu,
   MenuItem,
@@ -20,7 +21,7 @@ import { openCart } from "../../Redux/cart";
 import logout from "../Auth/logout";
 
 export default function NavigationBar() {
-  const { singedIn, email, role } = useSelector((state) => state.user);
+  const { singedIn, email } = useSelector((state) => state.user);
   const { count } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
@@ -99,11 +100,15 @@ export default function NavigationBar() {
                 }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}>
+                <MenuItem disableTouchRipple>
+                  <Typography textAlign="center">{email}</Typography>
+                </MenuItem>
+                <Divider />
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">Orders</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
-                  <Button variant="outlined" onClick={logout}>
+                  <Button variant="outlined" onClick={logout} fullWidth>
                     Logout
                   </Button>
                 </MenuItem>
@@ -125,7 +130,13 @@ export default function NavigationBar() {
                 Login
               </Button>
               <Box width="10px" />
-              <Button variant="contained">Create an account</Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  navigate("/register");
+                }}>
+                Create an account
+              </Button>
             </Box>
           )}
         </Toolbar>

@@ -5,12 +5,12 @@ import {
   CssBaseline,
   Grid,
   LinearProgress,
+  Link,
   TextField,
   Typography,
 } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 import { api_endpoint } from "../../config";
 
@@ -41,6 +41,7 @@ export default function Login() {
       })
       .catch((err) => {
         console.log(err);
+        return;
       });
   };
 
@@ -106,7 +107,7 @@ export default function Login() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}>
-              Sign In
+              Next
             </Button>
             <Grid container>
               <Grid item xs>
