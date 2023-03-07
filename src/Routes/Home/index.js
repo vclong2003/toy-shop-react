@@ -137,6 +137,7 @@ export default function Home() {
               value={sorting}
               onChange={(evt) => {
                 setSorting(evt.target.value);
+                setActivePage(1);
               }}>
               {sortOptions.map((item, index) => {
                 return (

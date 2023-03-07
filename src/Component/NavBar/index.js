@@ -1,17 +1,4 @@
-import {
-  AccountCircle,
-  AccountTree,
-  ManageAccounts,
-  MenuOutlined,
-  Person,
-  Person2,
-  Person3,
-  Person4,
-  PersonOffOutlined,
-  ShoppingCartOutlined,
-  SupervisorAccount,
-  VerifiedUser,
-} from "@mui/icons-material";
+import { AccountCircle, ShoppingCartOutlined } from "@mui/icons-material";
 import {
   AppBar,
   Badge,
@@ -113,7 +100,7 @@ export default function NavigationBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}>
                 <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">Profile</Typography>
+                  <Typography textAlign="center">Orders</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Button variant="outlined" onClick={logout}>
