@@ -375,14 +375,28 @@ export default function Checkout() {
               <Typography variant="h5" gutterBottom textAlign="center">
                 Your order has been placed, thank you for using our service!
               </Typography>
-              <Button
-                fullWidth
-                variant="contained"
-                onClick={() => {
-                  navigate("/product");
-                }}>
-                Continue shopping
-              </Button>
+              <Grid container spacing={2}>
+                <Grid item lg={5}>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    onClick={() => {
+                      navigate("/orders");
+                    }}>
+                    Your orders
+                  </Button>
+                </Grid>
+                <Grid item lg={7}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={() => {
+                      navigate("/product");
+                    }}>
+                    Continue shopping
+                  </Button>
+                </Grid>
+              </Grid>
             </>
           ) : (
             <>{steps[activeStep].component}</>
