@@ -8,12 +8,19 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { api_endpoint } from "../../config";
 
 export default function Dashboard() {
+  const { singedIn, role } = useSelector((state) => state.user);
   const [activeTab, setActiveTab] = useState(0);
-  return (
-    <Box height="100%" sx={{ overflowY: "hidden" }}>
+
+  return !role.includes("staff") && !role.includes("admin") ? (
+    <Typography variant="h5">You are not allowed to view this page!</Typography>
+  ) : (
+    <Box>
       <Grid container>
         <Grid item lg={2}>
           <Tabs
@@ -51,10 +58,42 @@ export default function Dashboard() {
           </Tabs>
         </Grid>
         <Grid item lg={8}>
-          <Container>Test</Container>
+          <Container>
+            <OrdersManager />
+          </Container>
         </Grid>
-        <Grid item lg={8} />
+        <Grid item lg={2} />
       </Grid>
     </Box>
   );
+}
+
+function OrdersManager() {
+  const statusOption = [
+    "Pending",
+    "In progress",
+    "Completed",
+    "Returned",
+    "Canceled",
+  ];
+  const [orders, setOrders] = useState([]);
+  const [orderDetail, setOrderDetail] = useState();
+
+  const loadAllOrders = () => {
+    axios
+      .get(`${api_endpoint}/order/all`, { withCredentials: true })
+      .then((res) => {
+        setOrders([...res.data]);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    loadAllOrders();
+  }, []);
+
+  return <Box></Box>;
 }
