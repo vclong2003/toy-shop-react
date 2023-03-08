@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
@@ -13,6 +13,8 @@ import Footer from "./Component/Footer";
 import Cart from "./Component/Cart";
 import { getCurrentUser } from "./Component/User";
 import Checkout from "./Routes/Order/checkOut";
+import Orders from "./Routes/Order";
+import Dashboard from "./Routes/Dashboard";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -25,11 +27,18 @@ root.render(
 );
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    getCurrentUser();
+    setLoading(true);
+    getCurrentUser().then(() => {
+      setLoading(false);
+    });
   }, []);
 
-  return (
+  return loading ? (
+    ""
+  ) : (
     <BrowserRouter>
       <NavigationBar />
       <Cart />
@@ -37,8 +46,10 @@ function App() {
         <Route index element={<Navigate to="/product" />} />
         <Route path="/product/*" element={<Home />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders" element={<Orders />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />
     </BrowserRouter>

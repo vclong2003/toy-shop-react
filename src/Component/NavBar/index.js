@@ -104,7 +104,11 @@ export default function NavigationBar() {
                   <Typography textAlign="center">{email}</Typography>
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleCloseUserMenu}>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/orders");
+                    handleCloseUserMenu();
+                  }}>
                   <Typography textAlign="center">Orders</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>

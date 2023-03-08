@@ -114,6 +114,9 @@ export default function Checkout() {
               fullWidth
               variant="standard"
               value={formData.lastName}
+              onChange={(evt) => {
+                setFormData({ ...formData, lastName: evt.target.value });
+              }}
             />
           </Grid>
           <Grid item xs={12}>
