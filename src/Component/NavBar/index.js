@@ -1,4 +1,8 @@
-import { AccountCircle, ShoppingCartOutlined } from "@mui/icons-material";
+import {
+  AccountCircle,
+  Dashboard,
+  ShoppingCartOutlined,
+} from "@mui/icons-material";
 import {
   AppBar,
   Badge,
@@ -21,7 +25,7 @@ import { openCart } from "../../Redux/cart";
 import logout from "../Auth/logout";
 
 export default function NavigationBar() {
-  const { singedIn, email } = useSelector((state) => state.user);
+  const { singedIn, email, role } = useSelector((state) => state.user);
   const { count } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
@@ -76,6 +80,19 @@ export default function NavigationBar() {
             </Box>
           ) : (
             ""
+          )}
+
+          {!role.includes("staff") && !role.includes("admin") ? (
+            ""
+          ) : (
+            <Box sx={{ flexGrow: 0 }}>
+              <IconButton
+                onClick={() => {
+                  navigate("/dashboard");
+                }}>
+                <Dashboard />
+              </IconButton>
+            </Box>
           )}
 
           {singedIn ? (

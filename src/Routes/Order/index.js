@@ -4,10 +4,8 @@ import {
   Container,
   CssBaseline,
   Dialog,
-  DialogTitle,
   Divider,
   Grid,
-  IconButton,
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -15,10 +13,8 @@ import { useEffect, useState } from "react";
 import { api_endpoint } from "../../config";
 import { DataGrid } from "@mui/x-data-grid";
 import { AspectRatio } from "@mui/joy";
-import { Close } from "@mui/icons-material";
 
 export default function Orders() {
-  const [orderDetailVisible, setOrderDetailVisible] = useState(false);
   const [orders, setOrders] = useState([]);
   const [orderDetail, setOrderDetail] = useState({
     items: [],
@@ -26,6 +22,7 @@ export default function Orders() {
     shippingAddress: { firstName: "", lastName: "" },
     status: "",
   });
+  const [orderDetailVisible, setOrderDetailVisible] = useState(false);
 
   const col = [
     { field: "date", headerName: "Date", width: 250 },
